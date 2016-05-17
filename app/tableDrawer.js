@@ -64,7 +64,6 @@ define(function () {
     }
     function _toggleCircles(){
         circlesOn = circlesOn ? false : true
-        console.log('circlesOn', circlesOn)
         updateTable();
     }
     function setDimensionsOfCell(v){
@@ -151,17 +150,31 @@ define(function () {
                     .data(columns)
                     .enter()
                     .append("th")
+                    .append("span")
                         .text(function(column) { maxColumn[column] = 0; 
                                                 minColumn[column] = 0; 
                                                 return column; })
                         .on("click", function(d) {
+                            var arrowToBeRemoved = document.getElementById("arrow");
+                            if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
+                            var img = document.createElement("img");
+                            img.id = "arrow";
                             if ((currentlySorting.by) == d){
-                                if (currentlySorting.order == "ascending")
-                                _sortBy(d, "descending");
-                                else
+                                if (currentlySorting.order == "ascending"){
+                                    _sortBy(d, "descending");
+                                    img.src = "/svg/arrow_down.png";
+                                    img.id = "arrow";
+                                    this.appendChild(img);
+                                }else{
+                                    img.src = "/svg/arrow_up.png";
+                                    this.appendChild(img);
                                     _sortBy(d, "ascending");
-                                }else
+                                }
+                            }else{            
+                                img.src = "/svg/arrow_up.png";
+                                this.appendChild(img);
                                 _sortBy(d, "ascending");
+                            }
                         });
 
                 // create a row for each object in the data

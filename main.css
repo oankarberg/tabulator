@@ -17,5 +17,19 @@ path {
 }
 
 td, th {
-    padding: 1px 4px;
+    margin: 1px 8px;
+}
+th{
+    cursor: pointer;
+}
+
+th span{
+    position: relative;
+}
+th img{
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    right: -12px;
+    top: 0;
 }
