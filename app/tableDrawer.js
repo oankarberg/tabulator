@@ -2,6 +2,7 @@
 define(function () {
     var fields;
 
+
     var ObjectTypes = {nominal: "Nominal",
                         quantitative: "Quantitative",
                         ordinal: "Ordinal",
@@ -10,7 +11,7 @@ define(function () {
     var heightForCell = {};
     var widthForCell = {};
 
-    var circlesOn = true;
+    var circlesOn = {};
 
     var maxColumn = {};
     var minColumn = {};
@@ -24,7 +25,10 @@ define(function () {
         var names = d3.keys(data[0])
         var fields = [];
         names.forEach(function (name){
-            fields.push({ name: name, type: ObjectTypes.nominal});
+            var type = ObjectTypes.nominal;
+            if (Number(data[0][name]))
+                type = ObjectTypes.quantitative;
+            fields.push({ name: name, type: type});
         });
         return fields;
     }
@@ -51,8 +55,9 @@ define(function () {
         }
 
     function _appendCircleForNumbers(v){
-        if(circlesOn){
-            if(v.datatype == ObjectTypes.quantitative){
+        
+        if(v.datatype == ObjectTypes.quantitative){
+            if(circlesOn[v.column]){
                 d3.select(this).append("svg")
                 .attr("width", widthForCell[v] )
                 .attr("height", heightForCell[v] )
@@ -67,12 +72,13 @@ define(function () {
                 })
                 
             }
-        }
+
         return "font-family: Courier;"; 
+        }
 
     }
-    function _toggleCircles(){
-        circlesOn = circlesOn ? false : true
+    function _toggleCircles(column){
+        circlesOn[column.name] = circlesOn[column.name] ? false : true
         updateTable();
     }
     function setDimensionsOfCell(v){
@@ -124,7 +130,7 @@ define(function () {
             .attr("getDims",setDimensionsOfCell)
             // }) // sets the font style
             .html(function(d) { 
-                return ObjectTypes.quantitative == d.datatype && circlesOn ? "" : d.value
+                return ObjectTypes.quantitative == d.datatype && circlesOn[d.column] ? "" : d.value
             })
             .attr("style", _appendCircleForNumbers)
            
@@ -218,9 +224,8 @@ define(function () {
         sortBy: function (column, order) {
             _sortBy(column,order)
         },
-        toggleCircles: function(){
-            console.log('bhehe')
-            _toggleCircles()
+        toggleCircles: function(column){
+            _toggleCircles(column)
         }
 
     };
