@@ -1,5 +1,5 @@
 body { 
-    font: 12px Arial;
+    font: 12px Arial;  
 }
 
 path { 
@@ -17,5 +17,8 @@ path {
 }
 
 td, th {
+    padding: 1px 4px;
+}
+td, th > div {
     padding: 1px 4px;
 }
