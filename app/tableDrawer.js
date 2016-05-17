@@ -1,6 +1,6 @@
 
 define(function () {
-
+    var fields;
 
     var ObjectTypes = {nominal: "Nominal",
                         quantitative: "Quantitative",
@@ -19,6 +19,15 @@ define(function () {
     var sortingFunction = null;
     var currentlySorting = {by: "", order: ""};
 
+    //find fields
+    function _findFields(data){
+        var names = d3.keys(data[0])
+        var fields = [];
+        names.forEach(function (name){
+            fields.push({ name: name, type: ObjectTypes.nominal});
+        });
+        return fields;
+    }
 
  
  //Draw the Ellipse
@@ -125,12 +134,14 @@ define(function () {
     }
     
     return {
-        initData: function () {
+        initData: function (file, cb) {
             // Get the data
-            d3.csv("sample_data_sales.csv", function(error, newData) {
+            d3.csv(file, function(error, newData) {
                 // render the table
                 data = newData
+                fields = _findFields(data);
                 var peopleTable = createTable(data);
+                cb(data, fields);
             });
 
             // The table generation function

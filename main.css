@@ -1,5 +1,12 @@
 body { 
-    font: 12px Arial;  
+    /*font: 12px Arial; */
+
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 20px; 
 }
 
 path { 
@@ -18,4 +25,21 @@ path {
 
 td, th {
     padding: 1px 4px;
+}
+
+th {
+    padding-bottom: 10px;
+    border-bottom: solid #ddd 1px;
+}
+
+#category-dashboard {
+    background: #eee;
+    float: left;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.category-dashboard-category{
+    margin: 5px 2px;
 }
