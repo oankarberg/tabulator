@@ -7,7 +7,8 @@ define(function () {
                         ordinal: "Ordinal",
                         interval: "Interval"};
 
-    var max = {};
+    var maxColumn = {};
+    var minColumn = {};
     var data = null;
     var table;
     var sortingFunction = null;
@@ -19,7 +20,8 @@ define(function () {
                 if (order == "ascending"){
                     currentlySorting.by = column
                     currentlySorting.order = order
-                    sortingFunction = function (a,b) { return d3.ascending(a[column], b[column])};
+                    sortingFunction = function (a,b) { 
+                                                    return d3.ascending(a[column], b[column])};
                 }else if (order =="descending"){
                     currentlySorting.by = column
                     currentlySorting.order = order
@@ -55,8 +57,11 @@ define(function () {
                     var val =  row[column];
                     var datatype;
                     if(Number(val)){
-                        if(max[column] < Number(val)){max[column]  = val}
+                        val = Number(val)
+                        if(maxColumn[column] < Number(val)){maxColumn[column] = val}
+                        if(minColumn[column] > Number(val)){minColumn[column] = val}
                         datatype = ObjectTypes.quantitative;
+                        row[column] = Number(row[column])
                     }else{
                         datatype = ObjectTypes.nominal;
                     }
@@ -78,14 +83,15 @@ define(function () {
                 // Style circles
                 if(v.datatype == ObjectTypes.quantitative){
                     this.style.background = "green;"
-                    var x = Math.abs(v.value) / max[v.column] * 30 + "px";
-                    var y = Math.abs(v.value) / max[v.column] * 30 + "px";
+                    var max = maxColumn[v.column] +  Math.abs(minColumn[v.column])
+                    var x = Math.abs(v.value - minColumn[v.column] ) / max  * 30 + "px";
+                    var y = Math.abs(v.value - minColumn[v.column]) / max * 30 + "px";
                     return "margin-left: auto; margin-right: auto;position: relative;background: green; border-radius: 50%;height: "+y+"; width:" + x +";";
                 }else{
                     return "font-family: Courier;";
                 }
             }) // sets the font style
-            .html(function(d) { 
+            .html(function(d) { return d.value;
                     return ObjectTypes.quantitative == d.datatype ? "" : d.value})
     }
     
@@ -114,7 +120,8 @@ define(function () {
                     .data(columns)
                     .enter()
                     .append("th")
-                        .text(function(column) { max[column] = 0; 
+                        .text(function(column) { maxColumn[column] = 0; 
+                                                minColumn[column] = 0; 
                                                 return column; })
                         .on("click", function(d) {
                             if ((currentlySorting.by) == d){
@@ -141,7 +148,9 @@ define(function () {
                             var val =  row[column];
                             var datatype;
                             if(Number(val)){
-                                if(max[column] < Number(val)){max[column]  = val}
+                                val = Number(val)
+                                if(maxColumn[column] < Number(val)){maxColumn[column]  = val }
+                                if(minColumn[column] > Number(val)){minColumn[column]  = val}
                                 datatype = ObjectTypes.quantitative;
                             }else{
                                 datatype = ObjectTypes.nominal;
@@ -164,8 +173,10 @@ define(function () {
                         // Style circles
                         if(v.datatype == ObjectTypes.quantitative){
                             this.style.background = "green;"
-                            var x = Math.abs(v.value) / max[v.column] * 30 + "px";
-                            var y = Math.abs(v.value) / max[v.column] * 30 + "px";
+                            console.log('miin ', minColumn[v.column])
+                            var max = maxColumn[v.column] +  Math.abs(minColumn[v.column])
+                            var x = (v.value - (minColumn[v.column]) ) / max * 30 + "px";
+                            var y = (v.value - (minColumn[v.column])) / max * 30 + "px";
                             return "margin-left: auto; margin-right: auto;position: relative;background: green; border-radius: 50%;height: "+y+"; width:" + x +";";
                         }else{
                             return "font-family: Courier;";
