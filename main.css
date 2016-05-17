@@ -19,6 +19,3 @@ path {
 td, th {
     padding: 1px 4px;
 }
-td, th > div {
-    padding: 1px 4px;
-}

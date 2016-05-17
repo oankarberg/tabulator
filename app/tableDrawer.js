@@ -7,12 +7,22 @@ define(function () {
                         ordinal: "Ordinal",
                         interval: "Interval"};
 
+    var heightForCell = {};
+    var widthForCell = {};
+
+    var circlesOn = true;
+
     var maxColumn = {};
     var minColumn = {};
     var data = null;
     var table;
     var sortingFunction = null;
     var currentlySorting = {by: "", order: ""};
+
+
+ 
+ //Draw the Ellipse
+
 
 
     function _sortBy (column, order) {
@@ -30,7 +40,55 @@ define(function () {
             }
             updateTable()
         }
-        
+
+    function _appendCircleForNumbers(v){
+        if(circlesOn){
+            if(v.datatype == ObjectTypes.quantitative){
+                d3.select(this).append("svg")
+                .attr("width", widthForCell[v] )
+                .attr("height", heightForCell[v] )
+                .append("circle")
+                .attr("cx", this.clientWidth / 2 + "px")
+                .attr("cy", this.clientHeight / 2 + "px")
+                .attr("r", function(d){ 
+
+                    var max = maxColumn[d.column] +  Math.abs(minColumn[d.column])
+                    var x = Math.abs(d.value - minColumn[d.column] ) / max  * 10
+                    return x;
+                })
+                
+            }
+        }
+        return "font-family: Courier;"; 
+
+    }
+    function _toggleCircles(){
+        circlesOn = circlesOn ? false : true
+        console.log('circlesOn', circlesOn)
+        updateTable();
+    }
+    function setDimensionsOfCell(v){
+        heightForCell[v] =  30
+        widthForCell[v] = this.clientWidth 
+        return {height: heightForCell[v], width: widthForCell[v]}
+    }
+    function _mapDataTypes(row){
+        var columns = d3.keys(data[0])
+        return columns.map(function(column) {
+            var val =  row[column];
+            var datatype;
+            if(Number(val)){
+                val = Number(val)
+                if(maxColumn[column] < Number(val)){maxColumn[column] = val}
+                if(minColumn[column] > Number(val)){minColumn[column] = val}
+                datatype = ObjectTypes.quantitative;
+                row[column] = Number(row[column])
+            }else{
+                datatype = ObjectTypes.nominal;
+            }
+            return {column: column, value: row[column], datatype: datatype };
+        });
+    }
     function updateTable(){
         if (data == null)
             return
@@ -49,50 +107,21 @@ define(function () {
             .enter()
             .append("tr");
 
+
         // create a cell in each row for each column
         var cells = rows.selectAll("td")
-            .data(function(row) {
-                return columns.map(function(column) {
-                    // Map data types
-                    var val =  row[column];
-                    var datatype;
-                    if(Number(val)){
-                        val = Number(val)
-                        if(maxColumn[column] < Number(val)){maxColumn[column] = val}
-                        if(minColumn[column] > Number(val)){minColumn[column] = val}
-                        datatype = ObjectTypes.quantitative;
-                        row[column] = Number(row[column])
-                    }else{
-                        datatype = ObjectTypes.nominal;
-                    }
-                    return {column: column, value: row[column], datatype: datatype };
-                });
-            })
+            .data(_mapDataTypes)
             .enter()
-            .append("td") 
-            .attr("style",function(v){
-                if(v.datatype == ObjectTypes.quantitative){
-                    this.innerHTML = ""
-                    return "font-family: Courier;text-align: center;";
-                }else{
-                    return "font-family: Courier;";
-                }
+            .append("td")
+            .attr("getDims",setDimensionsOfCell)
+            // }) // sets the font style
+            .html(function(d) { 
+                return ObjectTypes.quantitative == d.datatype && circlesOn ? "" : d.value
             })
-            .append("div")
-            .attr("style",function(v){
-                // Style circles
-                if(v.datatype == ObjectTypes.quantitative){
-                    this.style.background = "green;"
-                    var max = maxColumn[v.column] +  Math.abs(minColumn[v.column])
-                    var x = Math.abs(v.value - minColumn[v.column] ) / max  * 30 + "px";
-                    var y = Math.abs(v.value - minColumn[v.column]) / max * 30 + "px";
-                    return "margin-left: auto; margin-right: auto;position: relative;background: green; border-radius: 50%;height: "+y+"; width:" + x +";";
-                }else{
-                    return "font-family: Courier;";
-                }
-            }) // sets the font style
-            .html(function(d) { return d.value;
-                    return ObjectTypes.quantitative == d.datatype ? "" : d.value})
+            .attr("style", _appendCircleForNumbers)
+           
+
+
     }
     
     return {
@@ -101,7 +130,7 @@ define(function () {
             d3.csv("sample_data_sales.csv", function(error, newData) {
                 // render the table
                 data = newData
-                 var peopleTable = createTable(data);
+                var peopleTable = createTable(data);
             });
 
             // The table generation function
@@ -109,9 +138,11 @@ define(function () {
             function createTable(data) {
                 var columns = d3.keys(data[0])
                 
+
                 var newTable = d3.select("body").append("table"),
                     thead = newTable.append("thead"),
                     tbody = newTable.append("tbody");
+
 
                 table = newTable
                 // append the header row
@@ -142,47 +173,15 @@ define(function () {
                 
                 // create a cell in each row for each column
                 var cells = rows.selectAll("td")
-                    .data(function(row) {
-                        return columns.map(function(column) {
-                            // Map data types
-                            var val =  row[column];
-                            var datatype;
-                            if(Number(val)){
-                                val = Number(val)
-                                if(maxColumn[column] < Number(val)){maxColumn[column]  = val }
-                                if(minColumn[column] > Number(val)){minColumn[column]  = val}
-                                datatype = ObjectTypes.quantitative;
-                            }else{
-                                datatype = ObjectTypes.nominal;
-                            }
-                            return {column: column, value: row[column], datatype: datatype };
-                        });
-                    })
+                    .data(_mapDataTypes)
                     .enter()
-                    .append("td") 
-                    .attr("style",function(v){
-                        if(v.datatype == ObjectTypes.quantitative){
-                            this.innerHTML = ""
-                            return "font-family: Courier;text-align: center;";
-                        }else{
-                            return "font-family: Courier;";
-                        }
+                    .append("td")
+                    .attr("getDims",setDimensionsOfCell)
+                    // }) // sets the font style
+                    .html(function(d) { 
+                        return ObjectTypes.quantitative == d.datatype && circlesOn ? "" : d.value
                     })
-                    .append("div")
-                    .attr("style",function(v){
-                        // Style circles
-                        if(v.datatype == ObjectTypes.quantitative){
-                            this.style.background = "green;"
-                            console.log('miin ', minColumn[v.column])
-                            var max = maxColumn[v.column] +  Math.abs(minColumn[v.column])
-                            var x = (v.value - (minColumn[v.column]) ) / max * 30 + "px";
-                            var y = (v.value - (minColumn[v.column])) / max * 30 + "px";
-                            return "margin-left: auto; margin-right: auto;position: relative;background: green; border-radius: 50%;height: "+y+"; width:" + x +";";
-                        }else{
-                            return "font-family: Courier;";
-                        }
-                    }) // sets the font style
-                    .html(function(d) { return ObjectTypes.quantitative == d.datatype ? "" : d.value})
+                    .attr("style", _appendCircleForNumbers)
 
                         
 
@@ -194,6 +193,10 @@ define(function () {
         },
         sortBy: function (column, order) {
             _sortBy(column,order)
+        },
+        toggleCircles: function(){
+            console.log('bhehe')
+            _toggleCircles()
         }
 
     };
