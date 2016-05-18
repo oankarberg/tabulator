@@ -8,7 +8,7 @@ define(function (require) {
         categoryDashboard.createDashboard("category-dashboard", fields, table);
         var header = document.getElementById("table_header");
         
-        var late = Object.keys(data[0])[0]
+        var late = fields[Object.keys(data[0])[0]].displayName
         header.innerHTML =  "Showing data by " + late
     });
 
