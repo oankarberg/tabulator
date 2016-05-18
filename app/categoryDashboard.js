@@ -13,10 +13,11 @@ define(function () {
         element.textContent = category.name;
         if (category.type == ObjectTypes.quantitative){
             var button = document.createElement("button")
-            button.addEventListener("click", function() {table.toggleCircles(category) } );
+            button.addEventListener("click", function() { table.toggleCircles(category) } );
             button.textContent = "Toggle Circle";
-            element.appendChild(button);
+            element.appendChild(button)
         }
+
         return element;
     }
 
