@@ -10,7 +10,7 @@ define(function () {
     function createRow(category){
         var element = document.createElement("div");
         element.className = "category-dashboard-category";
-        element.textContent = category.name;
+        element.textContent = category.displayName;
         if (category.type == ObjectTypes.quantitative){
 
             var button = document.createElement("button");
@@ -36,8 +36,8 @@ define(function () {
             if (!div)
                 return
 
-            categories.forEach(function(category) {
-                div.appendChild(createRow(category));
+            Object.keys(categories).forEach (function (key) {
+                div.appendChild(createRow(categories[key]));
             });
         }
     }

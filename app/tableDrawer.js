@@ -22,15 +22,27 @@ define(function () {
     var sortingFunction = null;
     var currentlySorting = {by: "", order: ""};
 
+    function _formatName(name){
+        var newName  = name.replace(/_/g, " ");
+
+    return newName.replace(/([a-z])([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase()});
+    }
     //find fields
     function _findFields(data){
+
         var names = d3.keys(data[0])
-        var fields = [];
+        var fields = {};
         names.forEach(function (name){
             var type = ObjectTypes.nominal;
             if (Number(data[0][name]))
                 type = ObjectTypes.quantitative;
-            fields.push({ name: name, type: type});
+
+            maxColumn[name] = 0; 
+            minColumn[name] = 0;
+            maximumDecimals[name] = 0;
+            
+            var displayName = _formatName(name);
+            fields[name] = { name: name, displayName: displayName, type: type};
         });
         return fields;
     }
@@ -68,7 +80,6 @@ define(function () {
             .attr("cx", this.clientWidth / 2 + "px")
             .attr("cy", this.clientHeight / 2 + "px")
             .attr("r", function(d){ 
-
                 var max = maxColumn[d.column] +  Math.abs(minColumn[d.column])
                 var x = Math.abs(d.value - minColumn[d.column] ) / max  * 10
                 return x;
@@ -186,10 +197,8 @@ define(function () {
                     .enter()
                     .append("th")
                     .append("span")
-                        .text(function(column) { maxColumn[column] = 0; 
-                                                minColumn[column] = 0;
-                                                maximumDecimals[column] = 0; 
-                                                return column; })
+                        .text(function(column) {
+                                                return fields[column].displayName; })
                         .on("click", function(d) {
                             var arrowToBeRemoved = document.getElementById("arrow");
                             if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
