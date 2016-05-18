@@ -13,6 +13,8 @@ define(function () {
 
     var circlesOn = {};
 
+
+    var maximumDecimals = {};
     var maxColumn = {};
     var minColumn = {};
     var data = null;
@@ -72,12 +74,24 @@ define(function () {
                 return x;
             })
             
+        }else{
+            if(v.datatype == ObjectTypes.quantitative){
+                return "text-align:right;"
+            //     this.value = Number(v.value).toFixed(maximumDecimals[v.column]);
+            //     this.innerHtml = this.value
+            //     console.log(' ',this.innerHtml, Number(this.value).toFixed(maximumDecimals[v.column]) )
+            }
+            
         }
 
-        return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;"
+        return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; text-ali"
     }
 
-
+    var countDecimals = function(value) {
+        if (Math.floor(value) !== value)
+        return value.toString().split(".")[1].length || 0;
+        return 0;
+    }
     
     function _toggleCircles(column){
         circlesOn[column.name] = circlesOn[column.name] ? false : true
@@ -97,8 +111,10 @@ define(function () {
                 val = Number(val)
                 if(maxColumn[column] < Number(val)){maxColumn[column] = val}
                 if(minColumn[column] > Number(val)){minColumn[column] = val}
+                if(maximumDecimals[column] < countDecimals(val)){maximumDecimals[column] = countDecimals(val)}
                 datatype = ObjectTypes.quantitative;
-                row[column] = Number(row[column])
+                // GENERATE MANY DECIMALS
+                row[column] = Number(row[column]).toFixed(maximumDecimals[column])
             }else{
                 datatype = ObjectTypes.nominal;
             }
@@ -171,7 +187,8 @@ define(function () {
                     .append("th")
                     .append("span")
                         .text(function(column) { maxColumn[column] = 0; 
-                                                minColumn[column] = 0; 
+                                                minColumn[column] = 0;
+                                                maximumDecimals[column] = 0; 
                                                 return column; })
                         .on("click", function(d) {
                             var arrowToBeRemoved = document.getElementById("arrow");
