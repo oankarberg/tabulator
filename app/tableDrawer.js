@@ -51,24 +51,26 @@ define(function () {
         }
 
     function _appendCircleForNumbers(v){
-        if(circlesOn){
-            if(v.datatype == ObjectTypes.quantitative){
-                d3.select(this).append("svg")
-                .attr("width", widthForCell[v] )
-                .attr("height", heightForCell[v] )
-                .append("circle")
-                .attr("cx", this.clientWidth / 2 + "px")
-                .attr("cy", this.clientHeight / 2 + "px")
-                .attr("r", function(d){ 
+        
+        if(v.datatype == ObjectTypes.quantitative){
+                if(circlesOn){
+                    d3.select(this).append("svg")
+                    .attr("width", widthForCell[v] )
+                    .attr("height", heightForCell[v] )
+                    .append("circle")
+                    .attr("cx", this.clientWidth / 2 + "px")
+                    .attr("cy", this.clientHeight / 2 + "px")
+                    .attr("r", function(d){ 
 
-                    var max = maxColumn[d.column] +  Math.abs(minColumn[d.column])
-                    var x = Math.abs(d.value - minColumn[d.column] ) / max  * 10
-                    return x;
-                })
-                
-            }
+                        var max = maxColumn[d.column] +  Math.abs(minColumn[d.column])
+                        var x = Math.abs(d.value - minColumn[d.column] ) / max  * 10
+                        return x;
+                });
+                }
+                return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; "
+            
         }
-        return "font-family: Courier;"; 
+        return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;"
 
     }
     function _toggleCircles(){

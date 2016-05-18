@@ -7,6 +7,9 @@ body {
     font-variant: normal;
     font-weight: 400;
     line-height: 20px; 
+    -webkit-font-feature-settings: 'tnum';
+    -moz-font-feature-settings: 'tnum';
+    -ms-font-feature-settings: 'tnum';
 }
 
 path { 
@@ -22,8 +25,10 @@ path {
     stroke-width: 1;
     shape-rendering: crispEdges;
 }
-
-td, th {
+th{
+    margin: 1px 10px;
+}
+td {
     padding: 1px 4px;
 }
 
