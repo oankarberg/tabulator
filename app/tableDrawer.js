@@ -61,16 +61,17 @@ define(function () {
         
 
         if(circlesOn[v.column]){
+            console.log('circles ', circlesOn)
             d3.select(this).append("svg")
-            .attr("width", widthForCell[v] )
-            .attr("height", heightForCell[v] )
+            .attr("width", widthForCell[v] + "px")
+            .attr("height", heightForCell[v] + "px")
             .append("circle")
-            .attr("cx", this.clientWidth / 2 + "px")
-            .attr("cy", this.clientHeight / 2 + "px")
+            .attr("cx", widthForCell[v] / 2 + "px")
+            .attr("cy", heightForCell[v] / 2  + "px")
             .attr("r", function(d){ 
 
-                var max = maxColumn[d.column] +  Math.abs(minColumn[d.column])
-                var x = Math.abs(d.value - minColumn[d.column] ) / max  * 10
+                var max = maxColumn[d.column] +  Math.abs(minColumn[v.column])
+                var x = Math.abs(d.value - minColumn[d.column] ) / max  *  (heightForCell[v] / 2)
                 return x;
             })
             
@@ -84,7 +85,9 @@ define(function () {
             
         }
 
-        return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; text-ali"
+
+        
+        return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;"
     }
 
     var countDecimals = function(value) {
@@ -97,10 +100,10 @@ define(function () {
         circlesOn[column.name] = circlesOn[column.name] ? false : true
         updateTable();
     }
-    function setDimensionsOfCell(v){
-        heightForCell[v] =  30
-        widthForCell[v] = this.clientWidth 
-        return {height: heightForCell[v], width: widthForCell[v]}
+    function setDimensionsOfCell(column){
+        console.log('clienHesight ',this.clientWidth)
+        heightForCell[column] =  this.clientHeight - 5
+        widthForCell[column] = this.clientWidth 
     }
     function _mapDataTypes(row){
         var columns = d3.keys(data[0])
@@ -112,13 +115,14 @@ define(function () {
                 if(maxColumn[column] < Number(val)){maxColumn[column] = val}
                 if(minColumn[column] > Number(val)){minColumn[column] = val}
                 if(maximumDecimals[column] < countDecimals(val)){maximumDecimals[column] = countDecimals(val)}
+
                 datatype = ObjectTypes.quantitative;
                 // GENERATE MANY DECIMALS
                 row[column] = Number(row[column]).toFixed(maximumDecimals[column])
             }else{
                 datatype = ObjectTypes.nominal;
             }
-            return {column: column, value: row[column], datatype: datatype };
+            return {column: column, value: row[column], datatype: datatype};
         });
     }
     function updateTable(){
@@ -131,27 +135,24 @@ define(function () {
             data = data.sort(sortingFunction)
         }
 
-        d3.select("tbody").selectAll("tr").remove();
+        d3.select(".tbody").selectAll(".div-td").remove();
 
         // create a row for each object in the data
-         var rows = d3.select("tbody").selectAll("tr")
-            .data(data)
-            .enter()
-            .append("tr");
-
+         var rows = d3.select(".tbody").selectAll("div-tr")
+                    .data(data)
+                    .enter()
+                    .append("div").attr("class", "div-tr");
 
         // create a cell in each row for each column
         var cells = rows.selectAll("td")
             .data(_mapDataTypes)
             .enter()
-            .append("td")
-            .attr("getDims",setDimensionsOfCell)
-            // }) // sets the font style
+            .append("div").attr("class", "div-td")
             .html(function(d) { 
                 return ObjectTypes.quantitative == d.datatype && circlesOn[d.column] ? "" : d.value
             })
             .attr("style", _appendCircleForNumbers)
-           
+            
 
 
     }
@@ -173,64 +174,67 @@ define(function () {
                 var columns = d3.keys(data[0])
                 
 
-                var newTable = d3.select("body").append("table"),
-                    thead = newTable.append("thead"),
-                    tbody = newTable.append("tbody");
+                var newTable = d3.select("body").append("div").attr("class","mainTable"),
+                    // thead = newTable.append("div").attr("class","thead"),
+                    tbody = newTable.append("div").attr("class", "tbody");
 
 
                 table = newTable
                 // append the header row
-                thead.append("tr")
+                tbody.append("div").attr("class", "div-tr")
                     .selectAll("th")
                     .data(columns)
                     .enter()
-                    .append("th")
-                    .append("span")
-                        .text(function(column) { maxColumn[column] = 0; 
-                                                minColumn[column] = 0;
-                                                maximumDecimals[column] = 0; 
-                                                return column; })
-                        .on("click", function(d) {
-                            var arrowToBeRemoved = document.getElementById("arrow");
-                            if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
-                            var img = document.createElement("img");
-                            img.id = "arrow";
-                            if ((currentlySorting.by) == d){
-                                if (currentlySorting.order == "ascending"){
-                                    _sortBy(d, "descending");
-                                    img.src = "/svg/arrow_down.png";
-                                    img.id = "arrow";
-                                    this.appendChild(img);
-                                }else{
-                                    img.src = "/svg/arrow_up.png";
-                                    this.appendChild(img);
-                                    _sortBy(d, "ascending");
-                                }
-                            }else{            
+                    .append("div").attr("class", "div-th")
+                    
+                    .html(function(column) { maxColumn[column] = 0; 
+                                            minColumn[column] = 0;
+                                            maximumDecimals[column] = 0; 
+                                            return column; })
+                    .on("click", function(d) {
+                        var arrowToBeRemoved = document.getElementById("arrow");
+                        if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
+                        var span = document.createElement("span");
+                        var img = document.createElement("img");
+                        span.id = "arrow";
+                        if ((currentlySorting.by) == d){
+                            if (currentlySorting.order == "ascending"){
+                                _sortBy(d, "descending");
+                                img.src = "/svg/arrow_down.png";
+                                span.appendChild(img)
+                                this.appendChild(span);
+                            }else{
                                 img.src = "/svg/arrow_up.png";
-                                this.appendChild(img);
+                                span.appendChild(img)
+                                this.appendChild(span);
                                 _sortBy(d, "ascending");
                             }
-                        });
+                        }else{            
+                            img.src = "/svg/arrow_up.png";
+                            span.appendChild(img)
+                            this.appendChild(span);
+                            _sortBy(d, "ascending");
+                        }
+                    })
+                    
 
                 // create a row for each object in the data
-                var rows = tbody.selectAll("tr")
+                var rows = tbody.selectAll("div-tr")
                     .data(data)
                     .enter()
-                    .append("tr");
+                    .append("div").attr("class", "div-tr");
 
                 
                 // create a cell in each row for each column
                 var cells = rows.selectAll("td")
                     .data(_mapDataTypes)
                     .enter()
-                    .append("td")
-                    .attr("getDims",setDimensionsOfCell)
-                    // }) // sets the font style
+                    .append("div").attr("class","div-td")
                     .html(function(d) { 
-                        return ObjectTypes.quantitative == d.datatype && circlesOn ? "" : d.value
+                        return ObjectTypes.quantitative == d.datatype && circlesOn[d.column] ? "" : d.value
                     })
                     .attr("style", _appendCircleForNumbers)
+                    .attr("getDims",setDimensionsOfCell)
 
                         
 
