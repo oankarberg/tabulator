@@ -2,6 +2,7 @@
 define(function () {
     var fields;
 
+    var _arrayFields = []; 
 
     var ObjectTypes = {nominal: "Nominal",
                         quantitative: "Quantitative",
@@ -37,33 +38,38 @@ define(function () {
             var type = ObjectTypes.nominal;
             if (Number(data[0][name]))
                 type = ObjectTypes.quantitative;
+            else {
+                type = ObjectTypes.nominal;
+            }
 
-            maxColumn[name] = 0; 
-            minColumn[name] = 0;
-            maximumDecimals[name] = 0;
-            
             var displayName = _formatName(name);
-            fields[name] = { name: name, displayName: displayName, type: type, currentPosition: i};
+            var column = { name: name, 
+                displayName: displayName, 
+                type: type, 
+                currentPosition: i,
+                maxValue: 0,
+                minValue: 0,
+                maxDecimals: 0
+            };
+            fields[name] = column
+            _arrayFields.push(column)
         });
-        return fields;
+        return _arrayFields;
     }
 
- 
+
  //Draw the Ellipse
-
-
-
     function _sortBy (column, order) {
             if (column != null && order != null){
                 if (order == "ascending"){
                     currentlySorting.by = column
                     currentlySorting.order = order
                     sortingFunction = function (a,b) { 
-                                                    return d3.ascending(a[column], b[column])};
+                                                    return d3.ascending(a[column.name], b[column.name])};
                 }else if (order =="descending"){
                     currentlySorting.by = column
                     currentlySorting.order = order
-                    sortingFunction = function (a,b) { return d3.descending(a[column], b[column])};
+                    sortingFunction = function (a,b) { return d3.descending(a[column.name], b[column.name])};
                 }
             }
             updateTable()
@@ -71,9 +77,9 @@ define(function () {
 
     function _appendCircleForNumbers(v){
         
-        
+        var column = v.column;
 
-        if(circlesOn[v.column]){
+        if(circlesOn[v.column.name]){
             d3.select(this).append("svg")
             .attr("width", widthForCell[v] )
             .attr("height", heightForCell[v] )
@@ -81,13 +87,13 @@ define(function () {
             .attr("cx", this.clientWidth / 2 + "px")
             .attr("cy", this.clientHeight / 2 + "px")
             .attr("r", function(d){ 
-                var max = maxColumn[d.column] +  Math.abs(minColumn[d.column])
-                var x = Math.abs(d.value - minColumn[d.column] ) / max  * 10
+                var max = column.maxValue +  Math.abs(column.minValue);
+                var x = Math.abs(d.value - column.minValue ) / max  * 10
                 return x;
             })
             
         }else{
-            if(v.datatype == ObjectTypes.quantitative){
+            if(column.type == ObjectTypes.quantitative){
                 return "text-align:right;"
             //     this.value = Number(v.value).toFixed(maximumDecimals[v.column]);
             //     this.innerHtml = this.value
@@ -115,22 +121,22 @@ define(function () {
         return {height: heightForCell[v], width: widthForCell[v]}
     }
     function _mapDataTypes(row){
-        var columns = d3.keys(data[0])
+        var columns = _arrayFields
         return columns.map(function(column) {
-            var val =  row[column];
+            var val =  row[column.name];
             var datatype;
-            if(Number(val)){
+            if(column.type == ObjectTypes.quantitative){
                 val = Number(val)
-                if(maxColumn[column] < Number(val)){maxColumn[column] = val}
-                if(minColumn[column] > Number(val)){minColumn[column] = val}
-                if(maximumDecimals[column] < countDecimals(val)){maximumDecimals[column] = countDecimals(val)}
-                datatype = ObjectTypes.quantitative;
+                if(column.maxValue < val) {column.maxValue = val}
+                if(column.minValue > val) {column.minValue = val}
+                if(column.maxDecimals < countDecimals(val)){
+                    column.maxDecimals = countDecimals(val)
+                }
+                
                 // GENERATE MANY DECIMALS
-                row[column] = Number(row[column]).toFixed(maximumDecimals[column])
-            }else{
-                datatype = ObjectTypes.nominal;
+                val = val.toFixed(column.maxDecimals)
             }
-            return {column: column, value: row[column], datatype: datatype };
+            return {column: column, value: val};
         });
     }
 
@@ -162,7 +168,7 @@ define(function () {
             .attr("getDims",setDimensionsOfCell)
             // }) // sets the font style
             .html(function(d) { 
-                return ObjectTypes.quantitative == d.datatype && circlesOn[d.column] ? "" : d.value
+                return ObjectTypes.quantitative == d.column.type && circlesOn[d.column.name] ? "" : d.value
             })
             .attr("style", _appendCircleForNumbers)
            
@@ -175,14 +181,13 @@ define(function () {
         
             data = jsondata
             fields = _findFields(data);
-            var peopleTable = createTable(data);
+            var peopleTable = createTable(data, fields);
             return fields;
 
             // The table generation function
             function createTable(data) {
                 var columns = d3.keys(data[0])
                 
-
                 var newTable = d3.select("body").append("table"),
                     thead = newTable.append("thead"),
                     tbody = newTable.append("tbody");
@@ -192,12 +197,12 @@ define(function () {
                 // append the header row
                 thead.append("tr")
                     .selectAll("th")
-                    .data(columns)
+                    .data(_arrayFields)
                     .enter()
                     .append("th")
                     .append("span")
                         .text(function(column) {
-                                                return fields[column].displayName; })
+                                                return column.displayName; })
                         .on("click", function(d) {
                             var arrowToBeRemoved = document.getElementById("arrow");
                             if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
@@ -221,12 +226,12 @@ define(function () {
                             }
                         });
 
+
                 // create a row for each object in the data
                 var rows = tbody.selectAll("tr")
                     .data(data)
                     .enter()
                     .append("tr");
-
                 
                 // create a cell in each row for each column
                 var cells = rows.selectAll("td")
@@ -236,13 +241,10 @@ define(function () {
                     .attr("getDims",setDimensionsOfCell)
                     // }) // sets the font style
                     .html(function(d) { 
-                        return ObjectTypes.quantitative == d.datatype && circlesOn ? "" : d.value
+                        return ObjectTypes.quantitative == d.column.type && circlesOn[d.column.name] ? "" : d.value
                     })
                     .attr("style", _appendCircleForNumbers)
 
-                        
-
-                
                 updateTable();
                 return table;
             }
