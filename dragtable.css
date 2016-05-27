@@ -15,14 +15,14 @@
 }
 
 .dragtable-sortable th, .dragtable-sortable td{
-    border-left: 1px;
+    border-left: 0px;
 }
 
 .dragtable-sortable table {
     margin-top: 0;
 }
 .dragtable-sortable li:first-child th, .dragtable-sortable li:first-child td {
-    border-left: 1px solid #CCC; 
+    border-left: 0px solid #CCC; 
 }
 
 .ui-sortable-helper {
