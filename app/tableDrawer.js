@@ -10,6 +10,29 @@ define(function () {
     var sortingFunction = null;
     var currentlySorting = {by: "", order: ""};
 
+var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
+        
+    function _reorderColumns(table) {
+        var startIndex = table.startIndex-1;
+        var endIndex = table.endIndex-1;
+        var i, temp;
+        if (startIndex < endIndex){
+            for ( i = startIndex; i < endIndex; i++){
+                temp = _arrayFields[i];
+                _arrayFields[i] = _arrayFields[i+1];
+                _arrayFields[i+1] = temp;
+            }
+        }else{
+            for ( i = startIndex; i > endIndex; i--){
+                temp = _arrayFields[i];
+                _arrayFields[i] = _arrayFields[i-1];
+                _arrayFields[i-1] = temp;
+            }
+        }
+        updateTable()
+        
+
+    }
     function _formatName(name){
         var newName  = name.replace(/(^|_)(\w)/g, function ($0, $1, $2) {
             return ($1 && ' ') + $2.toUpperCase();
@@ -133,7 +156,6 @@ define(function () {
             // Nominal Value...
             }else{
                 if(!column.previousRowVal){
-                    console.log('previous val undefined',currentlySorting.by)
                     column.previousRowVal = val;
                 }else if(currentlySorting.by == column && column.previousRowVal == val){
                     val = ""
@@ -179,7 +201,7 @@ define(function () {
             })
             .attr("style", _appendCircleForNumbers)
            
-            $('#generated-table').dragtable();
+            $('#generated-table').dragtable({persistState: _reorderColumns });
                 
 
     }

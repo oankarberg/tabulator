@@ -44,7 +44,11 @@ td {
 
 
 th span{
+    z-index: 1;
     position: relative;
+}
+th {
+    text-align: left;
 }
 th img{
     width: 10px;

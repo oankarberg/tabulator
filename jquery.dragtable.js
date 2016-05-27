@@ -61,10 +61,10 @@
       excludeFooter: false,        // excludes the footer row(s) while moving other columns. Make sense if there is a footer with a colspan. */
       onlyHeaderThreshold: 100,    // TODO:  not implemented yet, switch automatically between entire col moving / only header moving
       dragaccept: null,            // draggable cols -> default all
-      persistState: null,          // url or function -> plug in your custom persistState function right here. function call is persistState(originalTable)
+      persistState: function() {console.log("persist")},          // url or function -> plug in your custom persistState function right here. function call is persistState(originalTable)
       restoreState: null,          // JSON-Object or function:  some kind of experimental aka Quick-Hack TODO: do it better
       exact: true,                 // removes pixels, so that the overlay table width fits exactly the original table width
-      clickDelay: 10,              // ms to wait before rendering sortable list and delegating click event
+      clickDelay: 80,              // ms to wait before rendering sortable list and delegating click event
       containment: null,           // @see http://api.jqueryui.com/sortable/#option-containment, use it if you want to move in 2 dimesnions (together with axis: null)
       cursor: 'move',              // @see http://api.jqueryui.com/sortable/#option-cursor
       cursorAt: false,             // @see http://api.jqueryui.com/sortable/#option-cursorAt
