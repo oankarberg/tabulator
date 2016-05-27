@@ -39,14 +39,19 @@ define(function () {
                 maxDecimals: 0,
                 circlesOn: false,
                 width: 0,
-                height: 0
+                height: 0,
+                previousRowVal: undefined
             };
             fields[name] = column
             _arrayFields.push(column)
         });
         return _arrayFields;
     }
-
+    function _resetPreviousRowValues(){
+        _arrayFields.forEach(function(column, i){
+            column.previousRowVal = undefined;
+        });
+    }
 
  //Draw the Ellipse
     function _sortBy (column, order) {
@@ -62,6 +67,7 @@ define(function () {
                     sortingFunction = function (a,b) { return d3.descending(a[column.name], b[column.name])};
                 }
             }
+            _resetPreviousRowValues();
             updateTable()
         }
 
@@ -92,7 +98,7 @@ define(function () {
             
         }
 
-        return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; text-ali"
+        return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;"
     }
 
     var countDecimals = function(value) {
@@ -106,8 +112,8 @@ define(function () {
         updateTable();
     }
     function _setDimensionsOfCell(v){
-        v.column.height =  30
-        v.column.width = this.clientWidth 
+        v.column.height =  30;
+        v.column.width = this.clientWidth;
     }
     function _mapDataTypes(row){
         var columns = _arrayFields
@@ -119,11 +125,23 @@ define(function () {
                 if(column.maxValue < val) {column.maxValue = val}
                 if(column.minValue > val) {column.minValue = val}
                 if(column.maxDecimals < countDecimals(val)){
-                    column.maxDecimals = countDecimals(val)
+                    column.maxDecimals = countDecimals(val);
+                }
+                // GENERATE MANY DECIMALS
+                val = val.toFixed(column.maxDecimals);
+
+            // Nominal Value...
+            }else{
+                if(!column.previousRowVal){
+                    console.log('previous val undefined',currentlySorting.by)
+                    column.previousRowVal = val;
+                }else if(currentlySorting.by == column && column.previousRowVal == val){
+                    val = ""
+                }else{
+                    column.previousRowVal = val;
                 }
                 
-                // GENERATE MANY DECIMALS
-                val = val.toFixed(column.maxDecimals)
+
             }
             return {column: column, value: val};
         });
@@ -192,10 +210,7 @@ define(function () {
                     .data(_arrayFields)
                     .enter()
                     .append("th")
-                    .append("span")
-                        .text(function(column) {
-                                                return column.displayName; })
-                        .on("click", function(d) {
+                    .on("click", function(d) {
                             var arrowToBeRemoved = document.getElementById("arrow");
                             if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
                             var img = document.createElement("img");
@@ -205,18 +220,22 @@ define(function () {
                                     _sortBy(d, "descending");
                                     img.src = "/svg/arrow_down.png";
                                     img.id = "arrow";
-                                    this.appendChild(img);
+                                    this.firstChild.appendChild(img);
                                 }else{
                                     img.src = "/svg/arrow_up.png";
-                                    this.appendChild(img);
+                                    this.firstChild.appendChild(img);
                                     _sortBy(d, "ascending");
                                 }
                             }else{            
                                 img.src = "/svg/arrow_up.png";
-                                this.appendChild(img);
+                                this.firstChild.appendChild(img);
                                 _sortBy(d, "ascending");
                             }
-                        });
+                        })
+                    .append("span")
+                        .text(function(column) {
+                                                return column.displayName; })
+                        
 
 
                 // create a row for each object in the data
