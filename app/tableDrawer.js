@@ -10,7 +10,7 @@ define(function () {
     var sortingFunction = null;
     var currentlySorting = {by: "", order: ""};
 
-var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
+    var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
         
     function _toggleVisibility(category){
         category.visible = category.visible ? false : true;
@@ -56,9 +56,9 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
                 type = ObjectTypes.Nominal;
             }
 
-            var displayName = _formatName(name);
+            // var displayName = _formatName(name);
             var column = { name: name, 
-                displayName: displayName, 
+                displayName: name, 
                 type: type, 
                 currentPosition: i,
                 maxValue: 0,
@@ -68,7 +68,8 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
                 width: 0,
                 height: 0,
                 visible: true,
-                previousRowVal: undefined
+                previousRowVal: undefined,
+                textAlign: "left";
             };
             fields[name] = column
             _arrayFields.push(column)
@@ -319,6 +320,12 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
                 return table;
             }
 
+        },
+        resetTable: function(){
+
+            var tableDiv = document.getElementById("table-wrapper");
+            if(tableDiv){tableDiv.parentNode.removeChild(tableDiv);}
+            _arrayFields = [];
         },
         sortBy: function (column, order) {
             _sortBy(column,order)

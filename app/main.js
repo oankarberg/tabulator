@@ -14,6 +14,8 @@ define(function (require) {
 
     
     fileHandler.setFileCallback( function (data) {
+        table.resetTable();
+        $('.welcome').hide();
         var fields = table.initData(data)
         categoryDashboard.createDashboard("category-dashboard", fields, table);
        var late = fields[0].displayName

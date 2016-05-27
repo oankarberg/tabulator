@@ -50,7 +50,20 @@ define(function () {
                 }else{
 
                 }
-            })
+            });
+    function getDefaultCSV(filename){
+        d3.csv("csvfiles/" + filename + ".csv", function(error, data) {
+            document.getElementById("file-upload").style.float = "right"
+            callback(data);
+        });
+    }
+    var defaultCSVFileButtons = document.querySelectorAll('.selectDefaultFile');
+    for(var i = 0; i < defaultCSVFileButtons.length; i++){
+        var button = defaultCSVFileButtons[i];
+        console.log()
+        button.addEventListener("click", function(){
+            getDefaultCSV(this.innerHTML)})
+    };
     //
     return {
 

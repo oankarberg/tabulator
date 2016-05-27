@@ -59,7 +59,7 @@ th img{
 }
 
 th {
-    padding: 0 10px 10px 10px;
+    padding: 0 10px 10px 0px;
     border-bottom: solid #ddd 1px;
     cursor: pointer;
 }
@@ -89,18 +89,22 @@ th {
     background: black;
 }
 #category-dashboard {
-    visibility: hidden;
+    display: none;
     background: #eee;
     float: left;
     margin: 5px;
     padding: 5px;
     border-radius: 4px;
 }
-
+#intro-home h1{
+    text-align: center;
+    margin: 40px 0;
+}
 #file-upload {
     background: #eee;
-    float:left;
-    margin: 5px;
+    margin: 0 auto;
+    position: relative;
+    max-width: 500px;
     padding: 5px;
     border-radius: 4px;
 }

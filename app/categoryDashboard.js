@@ -46,7 +46,7 @@ define(function () {
         createDashboard : function(id, categories, _table) {
             table = _table;
             var div = document.getElementById(id)
-            div.style.visibility = "visible"
+            div.style.display = "block";
             if (!div)
                 return
 
