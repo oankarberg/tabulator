@@ -107,7 +107,26 @@ th {
 .category-dashboard-category{
     margin: 5px 2px;
 }
+.category-dashboard-category ul {
+    list-style: none;
+}
+.category-dashboard-category ul.sub-nav {
+    margin: 0px;
+    visibility: hidden;
+    height: 0px;
+    opacity: 0;
+    transition: all .3s linear;
+}
 
+.category-dashboard-category ul.visible {
+    visibility: visible;
+    opacity: 1;
+    height: 50px;
+    transition: all .3s linear;
+}
+.category-dashboard-category-header:hover{
+    cursor: pointer;
+}
 table{
      border-collapse: collapse;
 }

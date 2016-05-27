@@ -12,6 +12,10 @@ define(function () {
 
 var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
         
+    function _toggleVisibility(category){
+        category.visible = category.visible ? false : true;
+        updateTable(); 
+    }
     function _reorderColumns(table) {
         var startIndex = table.startIndex-1;
         var endIndex = table.endIndex-1;
@@ -63,6 +67,7 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
                 circlesOn: false,
                 width: 0,
                 height: 0,
+                visible: true,
                 previousRowVal: undefined
             };
             fields[name] = column
@@ -139,7 +144,7 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
         v.column.width = this.clientWidth;
     }
     function _mapDataTypes(row){
-        var columns = _arrayFields
+        var columns = _arrayFields.filter(function(c){return c.visible})
         return columns.map(function(column) {
             var val =  row[column.name];
             var datatype;
@@ -179,6 +184,39 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
         if (sortingFunction) {
             data = data.sort(sortingFunction)
         }
+        d3.select("thead").selectAll("tr").remove();
+
+        d3.select("thead").append("tr")
+                    .selectAll("th")
+                    .data(_arrayFields.filter(function(d){ return d.visible }))
+                    .enter()
+                    .append("th")
+                    .on("click", function(d) {
+                            var arrowToBeRemoved = document.getElementById("arrow");
+                            if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
+                            var img = document.createElement("img");
+                            img.id = "arrow";
+                            if ((currentlySorting.by) == d){
+                                if (currentlySorting.order == "ascending"){
+                                    _sortBy(d, "descending");
+                                    img.src = "/svg/arrow_down.png";
+                                    img.id = "arrow";
+                                    this.firstChild.appendChild(img);
+                                }else{
+                                    img.src = "/svg/arrow_up.png";
+                                    this.firstChild.appendChild(img);
+                                    _sortBy(d, "ascending");
+                                }
+                            }else{            
+                                img.src = "/svg/arrow_up.png";
+                                this.firstChild.appendChild(img);
+                                _sortBy(d, "ascending");
+                            }
+                        })
+                    .append("span")
+                        .text(function(column) {
+                                                return column.displayName; })
+                 
 
         d3.select("tbody").selectAll("tr").remove();
 
@@ -223,13 +261,12 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
                     thead = newTable.append("thead"),
                     tbody = newTable.append("tbody");
 
-
                 table = newTable
                 
                 // append the header row
                 thead.append("tr")
                     .selectAll("th")
-                    .data(_arrayFields)
+                    .data(_arrayFields.filter(function(d){ return d.visible }))
                     .enter()
                     .append("th")
                     .on("click", function(d) {
@@ -288,8 +325,11 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
         },
         toggleCircles: function(column){
             _toggleCircles(column)
-        }
+        },
 
+        toggleVisibility: function(category){
+            _toggleVisibility(category);
+        }
     };
 });
 
