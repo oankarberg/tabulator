@@ -26,6 +26,9 @@ path {
     shape-rendering: crispEdges;
 }
 
+#table-wrapper{
+    padding: 1px;
+}
 h1#table_header{
     text-align:center;
 }
