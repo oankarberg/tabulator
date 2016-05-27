@@ -246,10 +246,10 @@
           // TODO: May cause duplicate style-Attribute
           var row_content = $(this).clone().wrap('<div></div>').parent().html();
           if (row_content.toLowerCase().indexOf('<th') === 0) sortableHtml += "<thead>";
-          sortableHtml += '<tr ' + rowAttrsArr[j] + '" style="height:' + heightArr[j] + 'px;">';
+          sortableHtml += '<tr ' + rowAttrsArr[j] + '" style="height:' + heightArr[j] + 'px;"><span>';
           sortableHtml += row_content;
           if (row_content.toLowerCase().indexOf('<th') === 0) sortableHtml += "</thead>";
-          sortableHtml += '</tr>';
+          sortableHtml += '</span></tr>';
         });
         sortableHtml += '</table>';
         sortableHtml += '</li>';

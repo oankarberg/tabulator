@@ -4,20 +4,7 @@ define(function () {
 
     var _arrayFields = []; 
 
-    var ObjectTypes = {nominal: "Nominal",
-                        quantitative: "Quantitative",
-                        ordinal: "Ordinal",
-                        interval: "Interval"};
 
-    var heightForCell = {};
-    var widthForCell = {};
-
-    var circlesOn = {};
-
-
-    var maximumDecimals = {};
-    var maxColumn = {};
-    var minColumn = {};
     var data = null;
     var table;
     var sortingFunction = null;
@@ -35,11 +22,11 @@ define(function () {
         var names = d3.keys(data[0])
         var fields = {};
         names.forEach(function (name, i ){
-            var type = ObjectTypes.nominal;
+            var type = ObjectTypes.Nominal;
             if (Number(data[0][name]))
-                type = ObjectTypes.quantitative;
+                type = ObjectTypes.Quantitative;
             else {
-                type = ObjectTypes.nominal;
+                type = ObjectTypes.Nominal;
             }
 
             var displayName = _formatName(name);
@@ -49,7 +36,10 @@ define(function () {
                 currentPosition: i,
                 maxValue: 0,
                 minValue: 0,
-                maxDecimals: 0
+                maxDecimals: 0,
+                circlesOn: false,
+                width: 0,
+                height: 0
             };
             fields[name] = column
             _arrayFields.push(column)
@@ -79,10 +69,10 @@ define(function () {
         
         var column = v.column;
 
-        if(circlesOn[v.column.name]){
+        if(column.circlesOn){
             d3.select(this).append("svg")
-            .attr("width", widthForCell[v] )
-            .attr("height", heightForCell[v] )
+            .attr("width", column.width )
+            .attr("height", column.height )
             .append("circle")
             .attr("cx", this.clientWidth / 2 + "px")
             .attr("cy", this.clientHeight / 2 + "px")
@@ -93,7 +83,7 @@ define(function () {
             })
             
         }else{
-            if(column.type == ObjectTypes.quantitative){
+            if(column.type == ObjectTypes.Quantitative){
                 return "text-align:right;"
             //     this.value = Number(v.value).toFixed(maximumDecimals[v.column]);
             //     this.innerHtml = this.value
@@ -112,20 +102,19 @@ define(function () {
     }
     
     function _toggleCircles(column){
-        circlesOn[column.name] = circlesOn[column.name] ? false : true
+        column.circlesOn = column.circlesOn ? false : true
         updateTable();
     }
-    function setDimensionsOfCell(v){
-        heightForCell[v] =  30
-        widthForCell[v] = this.clientWidth 
-        return {height: heightForCell[v], width: widthForCell[v]}
+    function _setDimensionsOfCell(v){
+        v.column.height =  30
+        v.column.width = this.clientWidth 
     }
     function _mapDataTypes(row){
         var columns = _arrayFields
         return columns.map(function(column) {
             var val =  row[column.name];
             var datatype;
-            if(column.type == ObjectTypes.quantitative){
+            if(column.type == ObjectTypes.Quantitative){
                 val = Number(val)
                 if(column.maxValue < val) {column.maxValue = val}
                 if(column.minValue > val) {column.minValue = val}
@@ -165,10 +154,10 @@ define(function () {
             .data(_mapDataTypes)
             .enter()
             .append("td")
-            .attr("getDims",setDimensionsOfCell)
+            .attr("getDims",_setDimensionsOfCell)
             // }) // sets the font style
             .html(function(d) { 
-                return ObjectTypes.quantitative == d.column.type && circlesOn[d.column.name] ? "" : d.value
+                return ObjectTypes.Quantitative == d.column.type && d.column.circlesOn ? "" : d.value
             })
             .attr("style", _appendCircleForNumbers)
            
@@ -241,10 +230,10 @@ define(function () {
                     .data(_mapDataTypes)
                     .enter()
                     .append("td")
-                    .attr("getDims",setDimensionsOfCell)
+                    .attr("getDims",_setDimensionsOfCell)
                     // }) // sets the font style
                     .html(function(d) { 
-                        return ObjectTypes.quantitative == d.column.type && circlesOn[d.column.name] ? "" : d.value
+                        return ObjectTypes.Quantitative == d.column.type && d.column.circlesOn ? "" : d.value
                     })
                     .attr("style", _appendCircleForNumbers)
 

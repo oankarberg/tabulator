@@ -27,8 +27,12 @@ path {
 }
 
 #table-wrapper{
+
     position: relative;
-    padding: 1px;
+
+    float: left;
+
+    padding: 0px;
 }
 h1#table_header{
     text-align:center;
@@ -100,4 +104,8 @@ th {
 }
 .category-dashboard-category{
     margin: 5px 2px;
+}
+
+table{
+     border-collapse: collapse;
 }

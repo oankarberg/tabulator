@@ -2,17 +2,12 @@ define(function () {
 
     var table;
 
-    var ObjectTypes = {nominal: "Nominal",
-                    quantitative: "Quantitative",
-                    ordinal: "Ordinal",
-                    interval: "Interval"};
-
     function createRow(category){
         document.find
         var element = document.createElement("div");
         element.className = "category-dashboard-category";
         element.textContent = category.displayName;
-        if (category.type == ObjectTypes.quantitative){
+        if (category.type == ObjectTypes.Quantitative){
 
             var button = document.createElement("button");
             var span = document.createElement("span");
