@@ -156,8 +156,9 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
                     column.maxDecimals = countDecimals(val);
                 }
                 // GENERATE MANY DECIMALS
+                row[column.name] = val;
                 val = val.toFixed(column.maxDecimals);
-
+                
             // Nominal Value...
             }else{
                 if(!column.previousRowVal){
@@ -184,6 +185,7 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
         if (sortingFunction) {
             data = data.sort(sortingFunction)
         }
+        d3.select("thead").selectAll("tr").selectAll("th").remove();
         d3.select("thead").selectAll("tr").remove();
 
         d3.select("thead").append("tr")
@@ -238,9 +240,8 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
                 return ObjectTypes.Quantitative == d.column.type && d.column.circlesOn ? "" : d.value
             })
             .attr("style", _appendCircleForNumbers)
+            $(table).dragtable('redraw').dragtable({persistState: _reorderColumns })
            
-            $('#generated-table').dragtable({persistState: _reorderColumns });
-                
 
     }
     
@@ -296,7 +297,7 @@ var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
                                                 return column.displayName; })
                         
 
-
+            $(table).dragtable({persistState: _reorderColumns })
                 // create a row for each object in the data
                 var rows = tbody.selectAll("tr")
                     .data(data)
