@@ -172,7 +172,8 @@ define(function () {
             })
             .attr("style", _appendCircleForNumbers)
            
-
+            $('#generated-table').dragtable();
+                
 
     }
     
@@ -195,6 +196,7 @@ define(function () {
 
 
                 table = newTable
+                
                 // append the header row
                 thead.append("tr")
                     .selectAll("th")
