@@ -5,6 +5,7 @@
 
   <!-- load the d3.js library -->    
   <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="papaparse.min.js"></script>
   <script data-main="app" src="require/require.js"></script>
 </head>
 <body>
@@ -12,5 +13,9 @@
 <div id="category-dashboard">
     <h3>Fields</h3>
 </div>
-
+<div id="file-upload">
+    <h3>Upload</h3>
+    <p>Upload the datafile you want to tabulate.</p>
+    <input id="fileuploadinput" type="file"></input>
+</div>
 </body>
