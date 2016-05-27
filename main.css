@@ -27,6 +27,7 @@ path {
 }
 
 #table-wrapper{
+    float: left;
     padding: 1px;
 }
 h1#table_header{
