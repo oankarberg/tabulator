@@ -185,7 +185,7 @@ define(function () {
                 var columns = d3.keys(data[0])
                 
 
-                var newTable = d3.select("body").append("table"),
+                var newTable = d3.select("body").append("div").attr("id","table-wrapper").append("table").attr("id", "generated-table"),
                     thead = newTable.append("thead"),
                     tbody = newTable.append("tbody");
 
