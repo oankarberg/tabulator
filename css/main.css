@@ -39,7 +39,7 @@ h1#table_header{
 }
 
 td {
-    padding: 1px 4px;
+    padding: 1px 0px;
 }
 
 
@@ -59,7 +59,7 @@ th img{
 }
 
 th {
-    padding: 0 10px 10px 0px;
+    padding-bottom: 10px;
     border-bottom: solid #ddd 1px;
     cursor: pointer;
 }
