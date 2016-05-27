@@ -98,7 +98,7 @@ define(function () {
             
         }
 
-        return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; text-ali"
+        return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;"
     }
 
     var countDecimals = function(value) {
@@ -208,10 +208,7 @@ define(function () {
                     .data(_arrayFields)
                     .enter()
                     .append("th")
-                    .append("span")
-                        .text(function(column) {
-                                                return column.displayName; })
-                        .on("click", function(d) {
+                    .on("click", function(d) {
                             var arrowToBeRemoved = document.getElementById("arrow");
                             if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
                             var img = document.createElement("img");
@@ -221,18 +218,22 @@ define(function () {
                                     _sortBy(d, "descending");
                                     img.src = "/svg/arrow_down.png";
                                     img.id = "arrow";
-                                    this.appendChild(img);
+                                    this.firstChild.appendChild(img);
                                 }else{
                                     img.src = "/svg/arrow_up.png";
-                                    this.appendChild(img);
+                                    this.firstChild.appendChild(img);
                                     _sortBy(d, "ascending");
                                 }
                             }else{            
                                 img.src = "/svg/arrow_up.png";
-                                this.appendChild(img);
+                                this.firstChild.appendChild(img);
                                 _sortBy(d, "ascending");
                             }
-                        });
+                        })
+                    .append("span")
+                        .text(function(column) {
+                                                return column.displayName; })
+                        
 
 
                 // create a row for each object in the data

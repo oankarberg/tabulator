@@ -33,9 +33,7 @@ path {
 h1#table_header{
     text-align:center;
 }
-th{
-    margin: 1px 10px;
-}
+
 td {
     padding: 1px 4px;
 }
@@ -53,7 +51,7 @@ th img{
 }
 
 th {
-    padding-bottom: 10px;
+    padding: 0 10px 10px 10px;
     border-bottom: solid #ddd 1px;
     cursor: pointer;
 }
