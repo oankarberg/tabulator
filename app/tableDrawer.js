@@ -4,11 +4,6 @@ define(function () {
 
     var _arrayFields = []; 
 
-    var ObjectTypes = {Nominal: "Nominal",
-                        Quantitative: "Quantitative",
-                        Ordinal: "Ordinal",
-                        Interval: "Interval"};
-
 
     var data = null;
     var table;

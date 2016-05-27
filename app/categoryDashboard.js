@@ -2,11 +2,6 @@ define(function () {
 
     var table;
 
-    var ObjectTypes = {nominal: "Nominal",
-                    Quantitative: "Quantitative",
-                    ordinal: "Ordinal",
-                    interval: "Interval"};
-
     function createRow(category){
         document.find
         var element = document.createElement("div");

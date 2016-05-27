@@ -1,4 +1,11 @@
 
+
+
+var ObjectTypes = {Nominal: "Nominal",
+                        Quantitative: "Quantitative",
+                        Ordinal: "Ordinal",
+                        Interval: "Interval"};
+
 define(function (require) {
 
     var fileHandler = require('./fileHandler.js');
