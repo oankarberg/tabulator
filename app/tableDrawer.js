@@ -39,14 +39,19 @@ define(function () {
                 maxDecimals: 0,
                 circlesOn: false,
                 width: 0,
-                height: 0
+                height: 0,
+                previousRowVal: undefined
             };
             fields[name] = column
             _arrayFields.push(column)
         });
         return _arrayFields;
     }
-
+    function _resetPreviousRowValues(){
+        _arrayFields.forEach(function(column, i){
+            column.previousRowVal = undefined;
+        });
+    }
 
  //Draw the Ellipse
     function _sortBy (column, order) {
@@ -62,6 +67,7 @@ define(function () {
                     sortingFunction = function (a,b) { return d3.descending(a[column.name], b[column.name])};
                 }
             }
+            _resetPreviousRowValues();
             updateTable()
         }
 
@@ -106,8 +112,8 @@ define(function () {
         updateTable();
     }
     function _setDimensionsOfCell(v){
-        v.column.height =  30
-        v.column.width = this.clientWidth 
+        v.column.height =  30;
+        v.column.width = this.clientWidth;
     }
     function _mapDataTypes(row){
         var columns = _arrayFields
@@ -119,11 +125,23 @@ define(function () {
                 if(column.maxValue < val) {column.maxValue = val}
                 if(column.minValue > val) {column.minValue = val}
                 if(column.maxDecimals < countDecimals(val)){
-                    column.maxDecimals = countDecimals(val)
+                    column.maxDecimals = countDecimals(val);
+                }
+                // GENERATE MANY DECIMALS
+                val = val.toFixed(column.maxDecimals);
+
+            // Nominal Value...
+            }else{
+                if(!column.previousRowVal){
+                    console.log('previous val undefined',currentlySorting.by)
+                    column.previousRowVal = val;
+                }else if(currentlySorting.by == column && column.previousRowVal == val){
+                    val = ""
+                }else{
+                    column.previousRowVal = val;
                 }
                 
-                // GENERATE MANY DECIMALS
-                val = val.toFixed(column.maxDecimals)
+
             }
             return {column: column, value: val};
         });
