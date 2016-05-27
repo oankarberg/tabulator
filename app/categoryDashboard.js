@@ -8,6 +8,7 @@ define(function () {
                     interval: "Interval"};
 
     function createRow(category){
+        document.find
         var element = document.createElement("div");
         element.className = "category-dashboard-category";
         element.textContent = category.displayName;
@@ -33,6 +34,7 @@ define(function () {
         createDashboard : function(id, categories, _table) {
             table = _table;
             var div = document.getElementById(id)
+            div.style.visibility = "visible"
             if (!div)
                 return
 

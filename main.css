@@ -82,6 +82,7 @@ th {
     background: black;
 }
 #category-dashboard {
+    visibility: hidden;
     background: #eee;
     float: left;
     margin: 5px;
@@ -89,6 +90,13 @@ th {
     border-radius: 4px;
 }
 
+#file-upload {
+    background: #eee;
+    float:left;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 4px;
+}
 .category-dashboard-category{
     margin: 5px 2px;
 }

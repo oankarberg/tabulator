@@ -133,6 +133,8 @@ define(function () {
             return {column: column, value: row[column], datatype: datatype };
         });
     }
+
+
     function updateTable(){
         if (data == null)
             return
@@ -169,18 +171,14 @@ define(function () {
     }
     
     return {
-        initData: function (file, cb) {
-            // Get the data
-            d3.csv(file, function(error, newData) {
-                // render the table
-                data = newData
-                fields = _findFields(data);
-                var peopleTable = createTable(data);
-                cb(data, fields);
-            });
+        initData: function (jsondata) {
+        
+            data = jsondata
+            fields = _findFields(data);
+            var peopleTable = createTable(data);
+            return fields;
 
             // The table generation function
-
             function createTable(data) {
                 var columns = d3.keys(data[0])
                 

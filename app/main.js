@@ -1,11 +1,15 @@
 
 define(function (require) {
 
+    var fileHandler = require('./fileHandler.js');
     var table = require('./tableDrawer.js');
     var categoryDashboard = require('./categoryDashboard.js');
 
-    categories = table.initData("sample_data_sales.csv", function(data, fields) {
+    
+    fileHandler.setFileCallback( function (data) {
+        var fields = table.initData(data)
         categoryDashboard.createDashboard("category-dashboard", fields, table);
+
         var tableWrapper = document.getElementById("table-wrapper");
         var h1 = document.createElement("h1");
         h1.id = "table_header";

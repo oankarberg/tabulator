@@ -5,6 +5,7 @@
 
   <!-- load the d3.js library -->    
   <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="papaparse.min.js"></script>
   <script data-main="app" src="require/require.js"></script>
   <script type="text/javascript" src="html2canvas/html2canvas.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -16,5 +17,9 @@
     <button id="save-table-button"> Save Table as PNG </button>
     <h3>Fields</h3>
 </div>
-
+<div id="file-upload">
+    <h3>Upload</h3>
+    <p>Upload the datafile you want to tabulate.</p>
+    <input id="fileuploadinput" type="file"></input>
+</div>
 </body>
