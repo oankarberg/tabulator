@@ -157,8 +157,9 @@ define(function () {
                     column.maxDecimals = countDecimals(val);
                 }
                 // GENERATE MANY DECIMALS
+                row[column.name] = val;
                 val = val.toFixed(column.maxDecimals);
-
+                
             // Nominal Value...
             }else{
                 if(!column.previousRowVal){
@@ -185,6 +186,7 @@ define(function () {
         if (sortingFunction) {
             data = data.sort(sortingFunction)
         }
+        d3.select("thead").selectAll("tr").selectAll("th").remove();
         d3.select("thead").selectAll("tr").remove();
 
         d3.select("thead").append("tr")
@@ -239,9 +241,8 @@ define(function () {
                 return ObjectTypes.Quantitative == d.column.type && d.column.circlesOn ? "" : d.value
             })
             .attr("style", _appendCircleForNumbers)
+            $(table).dragtable('redraw').dragtable({persistState: _reorderColumns })
            
-            $('#generated-table').dragtable({persistState: _reorderColumns });
-                
 
     }
     
@@ -297,7 +298,7 @@ define(function () {
                                                 return column.displayName; })
                         
 
-
+            $(table).dragtable({persistState: _reorderColumns })
                 // create a row for each object in the data
                 var rows = tbody.selectAll("tr")
                     .data(data)
