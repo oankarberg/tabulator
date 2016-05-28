@@ -38,8 +38,9 @@ h1#table_header{
     text-align:center;
 }
 
-td {
-    padding: 1px 0px;
+
+td{
+    height: 20px !important;
 }
 
 

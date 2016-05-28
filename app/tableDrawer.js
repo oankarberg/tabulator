@@ -69,7 +69,7 @@ define(function () {
                 height: 0,
                 visible: true,
                 previousRowVal: undefined,
-                alignStyle: "text-align:left;padding-left:20px; padding-right:20px;"
+                alignStyle: "text-align:left;padding: 4px 20px;"
             };
             fields[name] = column
             _arrayFields.push(column)
@@ -110,13 +110,14 @@ define(function () {
             .attr("height", column.height )
             .append("circle")
             .attr("cx", this.clientWidth / 2 + "px")
-            .attr("cy", this.clientHeight / 2 + "px")
+            .attr("cy", column.height / 2 + 3 + "px")
             .attr("r", function(d){ 
                 var max = column.maxValue +  Math.abs(column.minValue);
-                var x = Math.abs(d.value - column.minValue ) / max  * 10
+                var x = Math.abs(d.value - column.minValue ) / max  * 6
                 return x;
             })
-            
+
+            return "text-align:left;padding: 0px 0px; max-height: 28px;";
         }else{
             return column.alignStyle;
             
@@ -136,7 +137,7 @@ define(function () {
         updateTable();
     }
     function _setDimensionsOfCell(v){
-        v.column.height =  30;
+        v.column.height =  22;
         v.column.width = this.clientWidth;
     }
     function _mapDataTypes(row){
@@ -189,8 +190,7 @@ define(function () {
                     .data(_arrayFields.filter(function(d){ return d.visible }))
                     .enter()
                     .append("th")
-                    .attr("style", function(value){ console.log('value ', value)
-                     return value.alignStyle;})
+                    .attr("style", function(value){return value.alignStyle;})
                     .on("click", function(d) {
                             var arrowToBeRemoved = document.getElementById("arrow");
                             if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
