@@ -96,10 +96,23 @@ define(function () {
                     sortingFunction = function (a,b) { return d3.descending(a[column.name], b[column.name])};
                 }
             }
+            prevRowIndex = 0;
             _resetPreviousRowValues();
+            _resetTRClassNames();
             updateTable()
         }
 
+
+    function _resetTRClassNames(){
+        var unevenRows = document.querySelectorAll(".uneven");
+        var evenRows = document.querySelectorAll(".even");
+        for(var i = 0; i < evenRows.length; i++){
+            evenRows[i].classList.remove("even");
+        }
+        for(var i = 0; i < unevenRows.length; i++){
+            unevenRows[i].classList.remove("uneven");
+        }
+    }
     function _appendCircleForNumbers(v){
         
         var column = v.column;
@@ -140,9 +153,13 @@ define(function () {
         v.column.height =  22;
         v.column.width = this.clientWidth;
     }
+    var prevRowIndex = 0;
     function _mapDataTypes(row){
+
+      
+        var tempRowIndex = prevRowIndex;
         var columns = _arrayFields.filter(function(c){return c.visible})
-        return columns.map(function(column) {
+        var mapped = columns.map(function(column) {
             var val =  row[column.name];
             var datatype;
             if(column.type == ObjectTypes.Quantitative){
@@ -162,6 +179,7 @@ define(function () {
                     column.previousRowVal = val;
                 }else if(currentlySorting.by == column && column.previousRowVal == val){
                     val = ""
+                    tempRowIndex = prevRowIndex + 1;
                 }else{
                     column.previousRowVal = val;
                 }
@@ -170,8 +188,32 @@ define(function () {
             }
             return {column: column, value: val};
         });
+
+
+        
+        _setTRClassName(this,tempRowIndex);
+        // row.index = 
+        return mapped;
     }
 
+    function _setTRClassName(self, tempRowIndex){
+        var sibl = self.parentNode.previousSibling
+        if(tempRowIndex == prevRowIndex){
+            if(sibl && sibl.classList){
+                if(sibl.classList[0] == "even"){
+                    self.parentNode.classList.add("uneven");
+                }else{
+                    self.parentNode.classList.add("even");
+                }
+                
+            }else{
+                // First ROW
+                self.parentNode.classList.add("uneven");
+            }
+        }else{
+            self.parentNode.classList.add(sibl.classList[0]);
+        }
+    }
 
     function updateTable(){
         if (data == null)
@@ -182,6 +224,7 @@ define(function () {
         if (sortingFunction) {
             data = data.sort(sortingFunction)
         }
+
         d3.select("thead").selectAll("tr").selectAll("th").remove();
         d3.select("thead").selectAll("tr").remove();
 

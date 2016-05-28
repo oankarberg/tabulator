@@ -64,7 +64,12 @@ th:hover{
     cursor: move;
 }
 
+
+tr.uneven{
+    background: #F9F9F9;
+}
 th:hover::after {
+    // border: 2px solid #F1F1F1;
   background-color: #F7F7F7;
 }
 
