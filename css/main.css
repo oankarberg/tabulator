@@ -28,6 +28,8 @@ path {
     shape-rendering: crispEdges;
 }
 
+
+
 #table-wrapper{
 
     position: relative;
@@ -39,8 +41,37 @@ path {
 h1#table_header{
     text-align:center;
 }
+col.columnHover{
+    background: none;
+
+}
 
 
+td:hover::after,
+thead th:not(:empty):hover::after,
+td:focus::after,
+thead th:not(:empty):focus::after { 
+  content: '';  
+  height: 10000px;
+  left: 0;
+  position: absolute;  
+  top: -5000px;
+  width: 100%;
+  z-index: -1;
+}
+
+th:hover{
+    cursor: move;
+}
+
+th:hover::after {
+  background-color: #F7F7F7;
+}
+
+th:focus::after {
+  background-color: lightblue;
+}
+    
 td{
     height: 20px !important;
 }
@@ -49,6 +80,10 @@ td{
 th span{
     z-index: 1;
     position: relative;
+
+}
+th span:hover{
+    cursor: pointer;
 }
 th {
     text-align: left;
@@ -62,8 +97,10 @@ th img{
 }
 
 th {
+    position:relative;
     padding-bottom: 10px;
     border-bottom: solid #ddd 1px;
+    position:relative;
     cursor: pointer;
 }
 .toggle-circle{
@@ -135,5 +172,7 @@ th {
     cursor: pointer;
 }
 table{
+    background:none;
      border-collapse: collapse;
+     overflow: hidden;
 }

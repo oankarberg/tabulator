@@ -185,7 +185,8 @@ define(function () {
         d3.select("thead").selectAll("tr").selectAll("th").remove();
         d3.select("thead").selectAll("tr").remove();
 
-        d3.select("thead").append("tr")
+        d3.select("thead")
+                    .append("tr")
                     .selectAll("th")
                     .data(_arrayFields.filter(function(d){ return d.visible }))
                     .enter()
@@ -255,8 +256,9 @@ define(function () {
             function createTable(data) {
                 var columns = d3.keys(data[0])
     
-                var newTable = d3.select("body").append("div").attr("id","table-wrapper").append("table").attr("id", "generated-table"),
-
+                var newWrapper = d3.select("body").append("div").attr("id","table-wrapper"),
+                    newTable = newWrapper.append("table").attr("id", "generated-table"),
+                    t = newTable.append("col").attr("class", "columnHover").attr("span", _arrayFields.length ),
                     thead = newTable.append("thead"),
                     tbody = newTable.append("tbody");
 
