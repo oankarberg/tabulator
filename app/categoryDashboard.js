@@ -42,6 +42,21 @@ define(function () {
     }
 
 
+    var fonts = {
+         "Gill Sans": "'Gill Sans', 'Gill Sans MT', Calibri, sans-serif",
+         "Arial": "Arial, Helvetica, sans-serif ",
+         "Helvetica": "'Helvetica Neue', Helvetica, Arial, sans-serif",
+         "Verdana": "Verdana, Geneva, sans-serif ",
+         "Times New Roman": "'Times New Roman', Times, serif ",
+         "Palatino":"Palatino, 'Palatino Linotype', 'Palatino LT STD', 'Book Antiqua', Georgia, serif",
+         "Georgia": "Georgia, Times, 'Times New Roman', serif "
+    }
+    var list = $('.change-font');
+    for(var i = 0; i < list.length; i++){
+        list[i].addEventListener("click",function(){document.getElementById("table-wrapper").style.fontFamily = fonts[this.innerHTML];})
+    }
+
+
     return {
         createDashboard : function(id, categories, _table) {
             table = _table;

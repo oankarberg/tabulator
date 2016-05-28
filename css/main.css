@@ -1,5 +1,4 @@
 body { 
-    /*font: 12px Arial; */
     position: relative;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
     font-size: 14px;
@@ -10,6 +9,9 @@ body {
     -webkit-font-feature-settings: 'tnum';
     -moz-font-feature-settings: 'tnum';
     -ms-font-feature-settings: 'tnum';
+}
+button{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
 }
 
 path { 
