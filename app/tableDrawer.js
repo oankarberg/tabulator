@@ -155,7 +155,7 @@ define(function () {
                 // GENERATE MANY DECIMALS
                 row[column.name] = val;
                 val = val.toFixed(column.maxDecimals);
-                column.alignStyle = "text-align:right; padding-left: 20px; padding-right: 10px;";
+                column.alignStyle = "text-align:right; padding-left: 20px; padding-right: 20px;";
             // Nominal Value...
             }else{
                 if(!column.previousRowVal){
