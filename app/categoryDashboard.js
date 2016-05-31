@@ -85,5 +85,6 @@ define(function () {
             console.log("sup")
             d3.select("#"+id).html("");
 
+        }
     }
 });
