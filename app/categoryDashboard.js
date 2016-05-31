@@ -73,7 +73,7 @@ define(function () {
             _reset();
             table = _table;
             var div = document.getElementById(id)
-            div.style.display = "block";
+            
             if (!div)
                 return
 
@@ -81,9 +81,10 @@ define(function () {
                 div.appendChild(createRow(categories[key]));
             });
         },
-        reset : function(){
-            
-            
+        reset : function(id) {
+            console.log("sup")
+            d3.select("#"+id).html("");
+
         }
     }
 });
