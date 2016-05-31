@@ -69,7 +69,8 @@ define(function () {
                 height: 0,
                 visible: true,
                 previousRowVal: undefined,
-                alignStyle: "text-align:left;padding: 4px 20px;"
+                alignStyle: "text-align:left;",
+                padding: "padding: 4px 20px;"
             };
             fields[name] = column
             _arrayFields.push(column)
@@ -132,8 +133,7 @@ define(function () {
 
             return "text-align:left;padding: 0px 0px; max-height: 28px;";
         }else{
-            return column.alignStyle;
-            
+            return column.alignStyle + column.padding;
         }
 
         return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;"
@@ -172,7 +172,8 @@ define(function () {
                 // GENERATE MANY DECIMALS
                 row[column.name] = val;
                 val = val.toFixed(column.maxDecimals);
-                column.alignStyle = "text-align:right; padding-left: 20px; padding-right: 20px;";
+                column.alignStyle = "text-align:right;"
+
             // Nominal Value...
             }else{
                 if(!column.previousRowVal){
@@ -234,7 +235,7 @@ define(function () {
                     .data(_arrayFields.filter(function(d){ return d.visible }))
                     .enter()
                     .append("th")
-                    .attr("style", function(value){return value.alignStyle;})
+                    .attr("style", function(value){return value.alignStyle + value.padding + "padding-bottom: 10px;"})
                     .on("click", function(d) {
                             var arrowToBeRemoved = document.getElementById("arrow");
                             if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}

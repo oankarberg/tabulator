@@ -103,7 +103,7 @@ th img{
 
 th {
     position:relative;
-    padding-bottom: 10px;
+    // padding-bottom: 10px;
     border-bottom: solid #ddd 1px;
     position:relative;
     cursor: pointer;
