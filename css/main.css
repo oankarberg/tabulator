@@ -45,7 +45,9 @@ col.columnHover{
     background: none;
 
 }
-
+.headerCell {
+    border-right: solid #ddd 1px;
+}
 
 td:hover::after,
 thead th:not(:empty):hover::after,
@@ -107,6 +109,7 @@ th {
     border-bottom: solid #ddd 1px;
     position:relative;
     cursor: pointer;
+    white-space: normal;
 }
 .toggle-circle{
     cursor: pointer;

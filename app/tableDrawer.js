@@ -82,7 +82,7 @@ define(function () {
                 maxDecimals: 0,
                 circlesOn: false,
                 width: 0,
-
+                isHeader: false,
                 visible: true,
                 previousRowVal: undefined,
                 alignStyle: "text-align:left;",
@@ -91,6 +91,24 @@ define(function () {
             fields[name] = column
             _arrayFields.push(column)
         });
+
+        //Check first row to see if it is a "header"
+        var foundEntries =[];
+        for (var i=0; i < data.length; i++){
+            var entry = data[i][_arrayFields[0].name]
+            if (Number(entry))
+                break;
+            if (foundEntries.indexOf(entry) != -1)
+                break;
+            foundEntries.push(entry);
+
+            if (i == (data.length - 1)){
+
+                _arrayFields[0].isHeader = true;
+            }
+        }
+
+
         return _arrayFields;
     }
     function _resetPreviousRowValues(){
@@ -149,12 +167,12 @@ define(function () {
 
             return "text-align:left;padding: 0px 0px; max-height:" + columnHeight+paddingHeight*2+"px;";
         }else{
+            var style = "text-align:left;padding:" +paddingHeight+"px "+ paddingWidth+"px;";
+            if (v.column.isHeader){
+                d3.select(this).classed("headerCell",true);
+            }
             return "text-align:left;padding:" +paddingHeight+"px "+ paddingWidth+"px;";
         }
-
-
-
-        return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;"
     }
 
     var countDecimals = function(value) {
@@ -295,7 +313,7 @@ define(function () {
             .data(_mapDataTypes)
             .enter()
             .append("td")
-            .attr("getDims",_setDimensionsOfCell)
+            .attr("getDims", _setDimensionsOfCell)
             // }) // sets the font style
             .html(function(d) { 
                 return ObjectTypes.Quantitative == d.column.type && d.column.circlesOn ? "" : d.value
