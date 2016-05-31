@@ -56,9 +56,9 @@ define(function () {
                 type = ObjectTypes.Nominal;
             }
 
-            // var displayName = _formatName(name);
+            var displayName = _formatName(name);
             var column = { name: name, 
-                displayName: name, 
+                displayName: displayName, 
                 type: type, 
                 currentPosition: i,
                 maxValue: 0,
