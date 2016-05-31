@@ -44,7 +44,6 @@ define(function () {
                 if (file){
                     Papa.parse(file, { header: true, complete: function(results, file) {
                         //var fields = _findFields(results.data)
-                        document.getElementById("file-upload").style.float = "right"
                         callback(results.data)
                     }})
                 }else{

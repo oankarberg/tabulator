@@ -133,7 +133,8 @@ th {
 .toggle-circle.active .span-circle{
     background: black;
 }
-#category-dashboard {
+#sidebar {
+    max-width: 175px;
     display: none;
     background: #eee;
     float: left;
@@ -180,4 +181,8 @@ table{
     background:none;
      border-collapse: collapse;
      overflow: hidden;
+}
+
+#main-content {
+    overflow-x:scroll;
 }

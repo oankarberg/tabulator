@@ -61,13 +61,18 @@ define(function () {
         createDashboard : function(id, categories, _table) {
             table = _table;
             var div = document.getElementById(id)
-            div.style.display = "block";
+            
             if (!div)
                 return
 
             Object.keys(categories).forEach (function (key) {
                 div.appendChild(createRow(categories[key]));
             });
+        },
+
+        reset : function(id) {
+            console.log("sup")
+            d3.select("#"+id).html("");
         }
     }
 });

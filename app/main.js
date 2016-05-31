@@ -15,9 +15,16 @@ define(function (require) {
     
     fileHandler.setFileCallback( function (data) {
         table.resetTable();
+        $('#sidebar').show();
+        $('#sidebar').css("display","block")
+        categoryDashboard.reset("category-dashboard");
         $('.welcome').hide();
         var fields = table.initData(data)
         categoryDashboard.createDashboard("category-dashboard", fields, table);
+        var upload = $("#file-upload-content");
+        upload.remove();
+        upload.prependTo("#sidebar");
+
        var late = fields[0].displayName
 
        var tableWrapper = document.getElementById("table-wrapper");

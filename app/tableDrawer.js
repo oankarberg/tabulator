@@ -299,7 +299,7 @@ define(function () {
             function createTable(data) {
                 var columns = d3.keys(data[0])
     
-                var newWrapper = d3.select("body").append("div").attr("id","table-wrapper"),
+                var newWrapper = d3.select("#main-content").append("div").attr("id","table-wrapper"),
                     newTable = newWrapper.append("table").attr("id", "generated-table"),
                     t = newTable.append("col").attr("class", "columnHover").attr("span", _arrayFields.length ),
                     thead = newTable.append("thead"),
