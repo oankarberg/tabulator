@@ -181,6 +181,7 @@ table{
     background:none;
      border-collapse: collapse;
      overflow: hidden;
+     white-space: nowrap;
 }
 
 #main-content {
