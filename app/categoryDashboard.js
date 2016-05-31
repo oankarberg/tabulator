@@ -77,12 +77,22 @@ define(function () {
             if (!div)
                 return
 
+
+            div.innerHTML = "<div id='paddingSlider'></div>";
+            $( "#paddingSlider" ).slider({
+                value: table.getPadding(),
+                min: 2,
+                max: 15,
+                step: 1,
+                slide: function( event, ui ) {
+                    table.setPadding(ui.value);
+                }
+            })
             Object.keys(categories).forEach (function (key) {
                 div.appendChild(createRow(categories[key]));
             });
         },
         reset : function(id) {
-            console.log("sup")
             d3.select("#"+id).html("");
 
         }

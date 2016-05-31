@@ -35,7 +35,7 @@ path {
     position: absolute;
     margin-left: 200px;
     float: left;
-
+    overflow: s;
     padding: 0px;
 }
 h1#table_header{

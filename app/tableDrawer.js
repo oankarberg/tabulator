@@ -4,14 +4,25 @@ define(function () {
 
     var _arrayFields = []; 
 
-
+    var paddingHeight = 4;
+    var columnHeight = 22;
+    var paddingWidth = 20;
     var data = null;
-    var table;
+    var table; 
     var sortingFunction = null;
     var currentlySorting = {by: "", order: ""};
 
     var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
-        
+    
+    function _paddingEstimation(size){
+        var initialGuess = 15/(size/15);
+        if (initialGuess < 2){
+            initialGuess=2;
+        }
+        paddingHeight = initialGuess;
+
+    }
+
     function _toggleVisibility(category){
         category.visible = category.visible ? false : true;
         updateTable(); 
@@ -66,10 +77,10 @@ define(function () {
                 maxDecimals: 0,
                 circlesOn: false,
                 width: 0,
-                height: 0,
+
                 visible: true,
                 previousRowVal: undefined,
-                alignStyle: "text-align:left;padding: 4px 20px;"
+                alignStyle: "text-align:left;padding:" +paddingHeight+"px "+ paddingWidth+"px;"
             };
             fields[name] = column
             _arrayFields.push(column)
@@ -120,21 +131,23 @@ define(function () {
         if(column.circlesOn){
             d3.select(this).append("svg")
             .attr("width", column.width )
-            .attr("height", column.height )
+            .attr("height", "100%")
             .append("circle")
             .attr("cx", this.clientWidth / 2 + "px")
-            .attr("cy", column.height / 2 + 3 + "px")
+            .attr("cy", columnHeight / 2 + 3+ "px")
             .attr("r", function(d){ 
                 var max = column.maxValue +  Math.abs(column.minValue);
                 var x = Math.abs(d.value - column.minValue ) / max  * 6
                 return x;
             })
 
-            return "text-align:left;padding: 0px 0px; max-height: 28px;";
+            return "text-align:left;padding: 0px 0px; max-height:" + columnHeight+paddingHeight*2+"px;";
         }else{
-            return column.alignStyle;
+            return "text-align:left;padding:" +paddingHeight+"px "+ paddingWidth+"px;";
             
         }
+
+
 
         return "font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;"
     }
@@ -150,7 +163,7 @@ define(function () {
         updateTable();
     }
     function _setDimensionsOfCell(v){
-        v.column.height =  22;
+        
         v.column.width = this.clientWidth;
     }
     var prevRowIndex = 0;
@@ -282,6 +295,9 @@ define(function () {
                 return ObjectTypes.Quantitative == d.column.type && d.column.circlesOn ? "" : d.value
             })
             .attr("style", _appendCircleForNumbers)
+
+
+
             $(table).dragtable('redraw').dragtable({persistState: _reorderColumns })
            
 
@@ -298,7 +314,10 @@ define(function () {
             // The table generation function
             function createTable(data) {
                 var columns = d3.keys(data[0])
-    
+                
+                _paddingEstimation(data.length);
+
+
                 var newWrapper = d3.select("#main-content").append("div").attr("id","table-wrapper"),
                     newTable = newWrapper.append("table").attr("id", "generated-table"),
                     t = newTable.append("col").attr("class", "columnHover").attr("span", _arrayFields.length ),
@@ -379,6 +398,14 @@ define(function () {
 
         toggleVisibility: function(category){
             _toggleVisibility(category);
+        },
+
+        setPadding: function(padding){
+            paddingHeight = padding;
+            updateTable();
+        },
+        getPadding: function(){
+            return paddingHeight;
         }
     };
 });
