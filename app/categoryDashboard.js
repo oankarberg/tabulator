@@ -2,6 +2,8 @@ define(function () {
 
     var table;
 
+    var dashboardID;
+
     function createRow(category){
         var element = document.createElement("div");
         element.className = "category-dashboard-category";
@@ -55,10 +57,20 @@ define(function () {
     for(var i = 0; i < list.length; i++){
         list[i].addEventListener("click",function(){document.getElementById("table-wrapper").style.fontFamily = fonts[this.innerHTML];})
     }
-
+    function _reset(){
+        var dashboard = document.querySelectorAll(".category-dashboard-category");
+        if(dashboard.length > 0){
+            for(var i = 0; i < dashboard.length; i++){
+                dashboard[i].parentNode.removeChild(dashboard[i]);
+            };
+            // var _ = dashboard.removeChild(dashboard.childNode);
+            
+        }
+    }
 
     return {
         createDashboard : function(id, categories, _table) {
+            _reset();
             table = _table;
             var div = document.getElementById(id)
             
@@ -69,10 +81,9 @@ define(function () {
                 div.appendChild(createRow(categories[key]));
             });
         },
-
         reset : function(id) {
             console.log("sup")
             d3.select("#"+id).html("");
-        }
+
     }
 });
