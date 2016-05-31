@@ -5,6 +5,7 @@ define(function () {
     var _arrayFields = []; 
 
     var paddingHeight = 4;
+    var paddingHeightForFillColor = 6;
     var columnHeight = 22;
     var paddingWidth = 20;
     var data = null;
@@ -116,13 +117,13 @@ define(function () {
 
 
     function _resetTRClassNames(){
-        var unevenRows = document.querySelectorAll(".uneven");
+        var oddRows = document.querySelectorAll(".odd");
         var evenRows = document.querySelectorAll(".even");
         for(var i = 0; i < evenRows.length; i++){
             evenRows[i].classList.remove("even");
         }
-        for(var i = 0; i < unevenRows.length; i++){
-            unevenRows[i].classList.remove("uneven");
+        for(var i = 0; i < oddRows.length; i++){
+            oddRows[i].classList.remove("odd");
         }
     }
     function _appendCircleForNumbers(v){
@@ -211,21 +212,30 @@ define(function () {
     }
 
     function _setTRClassName(self, tempRowIndex){
+        if(paddingHeight > paddingHeightForFillColor){
+            self.parentNode.classList.add("even");
+            return;
+        }
         var sibl = self.parentNode.previousSibling
         if(tempRowIndex == prevRowIndex){
             if(sibl && sibl.classList){
                 if(sibl.classList[0] == "even"){
-                    self.parentNode.classList.add("uneven");
+                    self.parentNode.classList.add("odd");
                 }else{
                     self.parentNode.classList.add("even");
                 }
                 
             }else{
                 // First ROW
-                self.parentNode.classList.add("uneven");
+                self.parentNode.classList.add("odd");
             }
         }else{
             self.parentNode.classList.add(sibl.classList[0]);
+        }
+
+        // SET BACKGROUND COLOR
+        if(self.parentNode.classList.contains("odd")){
+            self.parentNode.style.backgroundColor = "rgba(234,234,234, " + (1 - (paddingHeight / paddingHeightForFillColor))+ ")";
         }
     }
 
