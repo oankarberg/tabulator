@@ -15,11 +15,16 @@ define(function () {
     var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
     
     function _paddingEstimation(size){
-        var initialGuess = 15/(size/15);
-        if (initialGuess < 2){
-            initialGuess=2;
-        }
-        paddingHeight = initialGuess;
+        var endSize = 60;
+        var maxPadding = 15;
+        var minPadding = 2;
+        var t = size/endSize;
+        if (t > 1)
+            t = 1;
+
+        var interpolation = (1-t)*maxPadding + t*minPadding;
+
+        paddingHeight = interpolation;
 
     }
 
