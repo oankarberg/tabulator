@@ -15,9 +15,10 @@ define(function () {
 
     var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
     
-    function _paddingEstimation(size){
+    function _paddingEstimation(size, rows){
+        //Interpolated padding height
         var endSize = 50;
-        var maxPadding = 15;
+        var maxPadding = 11;
         var minPadding = 2;
         var t = size/endSize;
         if (t > 1)
@@ -349,7 +350,7 @@ define(function () {
             function createTable(data) {
                 var columns = d3.keys(data[0])
                 
-                _paddingEstimation(data.length);
+                _paddingEstimation(data.length, columns.length);
 
 
                 var newWrapper = d3.select("#main-content").append("div").attr("id","table-wrapper"),
