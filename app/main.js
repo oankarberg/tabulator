@@ -12,6 +12,11 @@ define(function (require) {
     var table = require('./tableDrawer.js');
     var categoryDashboard = require('./categoryDashboard.js');
 
+
+
+
+
+
     
     fileHandler.setFileCallback( function (data) {
         table.resetTable();
@@ -20,12 +25,12 @@ define(function (require) {
         categoryDashboard.reset("category-dashboard");
         $('.welcome').hide();
         var fields = table.initData(data)
-        categoryDashboard.createDashboard("category-dashboard", fields, table);
+        categoryDashboard.createDashboard("category-dashboard", fields, table,data);
         var upload = $("#file-upload-content");
         upload.remove();
         upload.prependTo("#sidebar");
 
-       var late = fields[0].displayName
+        var late = fields[0].displayName
 
        var tableWrapper = document.getElementById("table-wrapper");
         var h1 = document.createElement("h1");
@@ -34,6 +39,18 @@ define(function (require) {
         // var header = document.getElementById("table_header");
         
         h1.innerHTML =  "Showing data by " + late
+
+
+
+
+
+        
+     
+
+
+
+
+
     });
 
 

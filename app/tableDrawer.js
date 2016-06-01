@@ -9,12 +9,11 @@ define(function () {
     var columnHeight = 22;
     var paddingWidth = 20;
     var data = null;
-    var table; 
+    var tabled3; 
     var sortingFunction = null;
     var currentlySorting = {by: "", order: ""};
 
-    var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
-    
+
     function _paddingEstimation(size){
         var endSize = 50;
         var maxPadding = 15;
@@ -76,8 +75,8 @@ define(function () {
             var displayName = _formatName(name);
             var column = { name: name, 
                 displayName: displayName, 
+                id: i,
                 type: type, 
-                currentPosition: i,
                 maxValue: 0,
                 minValue: 0,
                 maxDecimals: 0,
@@ -87,7 +86,8 @@ define(function () {
                 visible: true,
                 previousRowVal: undefined,
                 alignStyle: "text-align:left;",
-                padding: "padding: 4px 20px;"
+                padding: "padding: 4px 20px;",
+                sortingByArray: []
             };
             fields[name] = column
             _arrayFields.push(column)
@@ -118,6 +118,13 @@ define(function () {
         });
     }
 
+    function customAscending(a, b){
+            return a - b;
+    }
+    function customDescending(a, b){
+            return b - a;
+    }
+
  //Draw the Ellipse
     function _sortBy (column, order) {
             if (column != null && order != null){
@@ -125,11 +132,26 @@ define(function () {
                     currentlySorting.by = column
                     currentlySorting.order = order
                     sortingFunction = function (a,b) { 
-                                                    return d3.ascending(a[column.name], b[column.name])};
+                        if(column.type == ObjectTypes.Ordinal){
+                            return customAscending(column.sortingByArray.indexOf(a[column.name]), column.sortingByArray.indexOf(b[column.name]));
+                        }else{
+                          return d3.ascending(a[column.name], b[column.name]);   
+                        }
+
+                    }
                 }else if (order =="descending"){
                     currentlySorting.by = column
                     currentlySorting.order = order
-                    sortingFunction = function (a,b) { return d3.descending(a[column.name], b[column.name])};
+                    sortingFunction = function (a,b) {
+                        if(column.type == ObjectTypes.Ordinal){
+                            return customDescending(column.sortingByArray.indexOf(a[column.name]), column.sortingByArray.indexOf((b[column.name])));
+                        } else{
+                            return d3.descending(a[column.name], b[column.name]);
+                        }
+                        // return d3.descending(a[column.name], b[column.name]);
+                        
+                    }
+                        
                 }
             }
             prevRowIndex = 0;
@@ -275,11 +297,12 @@ define(function () {
         if (sortingFunction) {
             data = data.sort(sortingFunction)
         }
+        var tWrapper = d3.select("#table-wrapper");
 
-        d3.select("thead").selectAll("tr").selectAll("th").remove();
-        d3.select("thead").selectAll("tr").remove();
+        tWrapper.select("thead").selectAll("tr").selectAll("th").remove();
+        tWrapper.select("thead").selectAll("tr").remove();
 
-        d3.select("thead")
+        tWrapper.select("thead")
                     .append("tr")
                     .selectAll("th")
                     .data(_arrayFields.filter(function(d){ return d.visible }))
@@ -313,10 +336,10 @@ define(function () {
                                                 return column.displayName; })
                  
 
-        d3.select("tbody").selectAll("tr").remove();
+        tWrapper.select("tbody").selectAll("tr").remove();
 
         // create a row for each object in the data
-         var rows = d3.select("tbody").selectAll("tr")
+         var rows = tWrapper.select("tbody").selectAll("tr")
             .data(data)
             .enter()
             .append("tr");
@@ -336,7 +359,7 @@ define(function () {
 
 
 
-            $(table).dragtable('redraw').dragtable({persistState: _reorderColumns })
+            $(tabled3).dragtable('redraw').dragtable({persistState: _reorderColumns })
            
 
     }
@@ -362,7 +385,7 @@ define(function () {
                     thead = newTable.append("thead"),
                     tbody = newTable.append("tbody");
 
-                table = newTable
+                tabled3 = newTable
                 
                 // append the header row
                 thead.append("tr")
@@ -397,7 +420,7 @@ define(function () {
                                                 return column.displayName; })
                         
 
-            $(table).dragtable({persistState: _reorderColumns })
+            $(tabled3).dragtable({persistState: _reorderColumns })
                 // create a row for each object in the data
                 var rows = tbody.selectAll("tr")
                     .data(data)
@@ -417,7 +440,7 @@ define(function () {
                     .attr("style", _styleCell)
 
                 updateTable();
-                return table;
+                return tabled3;
             }
 
         },
