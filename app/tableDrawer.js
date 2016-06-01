@@ -1,7 +1,7 @@
 
 define(function () {
     var fields;
-
+    var color = "#DDD";
     var _arrayFields = []; 
 
     var paddingHeight = 4;
@@ -14,9 +14,11 @@ define(function () {
     var currentlySorting = {by: "", order: ""};
 
 
-    function _paddingEstimation(size){
+    
+    function _paddingEstimation(size, rows){
+        //Interpolated padding height
         var endSize = 50;
-        var maxPadding = 15;
+        var maxPadding = 11;
         var minPadding = 2;
         var t = size/endSize;
         if (t > 1)
@@ -179,6 +181,7 @@ define(function () {
             .append("circle")
             .attr("cx", self.clientWidth / 2 + "px")
             .attr("cy", columnHeight / 2 + 3+ "px")
+            .attr("fill", color ? color : "#000")
             .attr("r", function(d){ 
                 var max = column.maxValue +  Math.abs(column.minValue);
                 var x = Math.abs(d.value - column.minValue ) / max  * 6
@@ -308,7 +311,8 @@ define(function () {
                     .data(_arrayFields.filter(function(d){ return d.visible }))
                     .enter()
                     .append("th")
-                    .attr("style", function(value){return value.alignStyle + value.padding + "padding-bottom: 10px;"})
+                    .attr("style", function(value){return value.alignStyle + value.padding + "padding-bottom: 10px;"
+                                    + "border-bottom: solid "+color+" 1px;"})
                     .on("click", function(d) {
                             var arrowToBeRemoved = document.getElementById("arrow");
                             if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
@@ -376,7 +380,7 @@ define(function () {
             function createTable(data) {
                 var columns = d3.keys(data[0])
                 
-                _paddingEstimation(data.length);
+                _paddingEstimation(data.length, columns.length);
 
 
                 var newWrapper = d3.select("#main-content").append("div").attr("id","table-wrapper"),

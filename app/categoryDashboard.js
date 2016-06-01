@@ -169,8 +169,8 @@ define(function () {
             $( "#paddingSlider" ).slider({
                 value: table.getPadding(),
                 min: 2,
-                max: 15,
-                step: 1,
+                max: 11,
+                step: 0.5,
                 slide: function( event, ui ) {
                     table.setPadding(ui.value);
                 }
