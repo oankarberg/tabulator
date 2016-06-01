@@ -16,7 +16,7 @@ define(function () {
     var testCols = [1,2,3,4,5,6,7,8,9,10,11,12]
     
     function _paddingEstimation(size){
-        var endSize = 60;
+        var endSize = 50;
         var maxPadding = 15;
         var minPadding = 2;
         var t = size/endSize;
@@ -169,13 +169,13 @@ define(function () {
 
         if(column.circlesOn){
             _createCircleStyle(this,v);
-            return "text-align:left;padding: 0px 0px; max-height:" + columnHeight+paddingHeight*2+"px;";
+            return v.column.alignStyle+";padding: 0px 0px; max-height:" + columnHeight+paddingHeight*2+"px;";
         }else{
-            var style = "text-align:left;padding:" +paddingHeight+"px "+ paddingWidth+"px;";
+
             if (v.column.isHeader){
                 d3.select(this).classed("headerCell",true);
             }
-            return "text-align:left;padding:" +paddingHeight+"px "+ paddingWidth+"px;";
+            return v.column.alignStyle+":left;padding:" +paddingHeight+"px "+ paddingWidth+"px;";
         }
     }
 
@@ -211,7 +211,7 @@ define(function () {
                 }
                 // GENERATE MANY DECIMALS
                 row[column.name] = val;
-                val = val.toFixed(column.maxDecimals);
+                val = val.toFixed(2);
                 column.alignStyle = "text-align:right;"
 
             // Nominal Value...
