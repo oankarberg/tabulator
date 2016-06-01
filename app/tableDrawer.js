@@ -1,7 +1,7 @@
 
 define(function () {
     var fields;
-
+    var color = "#DDD";
     var _arrayFields = []; 
 
     var paddingHeight = 4;
@@ -158,6 +158,7 @@ define(function () {
             .append("circle")
             .attr("cx", self.clientWidth / 2 + "px")
             .attr("cy", columnHeight / 2 + 3+ "px")
+            .attr("fill", color ? color : "#000")
             .attr("r", function(d){ 
                 var max = column.maxValue +  Math.abs(column.minValue);
                 var x = Math.abs(d.value - column.minValue ) / max  * 6
@@ -286,7 +287,8 @@ define(function () {
                     .data(_arrayFields.filter(function(d){ return d.visible }))
                     .enter()
                     .append("th")
-                    .attr("style", function(value){return value.alignStyle + value.padding + "padding-bottom: 10px;"})
+                    .attr("style", function(value){return value.alignStyle + value.padding + "padding-bottom: 10px;"
+                                    + "border-bottom: solid "+color+" 1px;"})
                     .on("click", function(d) {
                             var arrowToBeRemoved = document.getElementById("arrow");
                             if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
