@@ -149,23 +149,26 @@ define(function () {
             oddRows[i].classList.remove("odd");
         }
     }
-    function _appendCircleForNumbers(v){
-        
-        var column = v.column;
-
-        if(column.circlesOn){
-            d3.select(this).append("svg")
+    function _createCircleStyle(self,v){
+        var column = v.column
+        d3.select(self).append("svg")
             .attr("width", column.width )
             .attr("height", "100%")
             .append("circle")
-            .attr("cx", this.clientWidth / 2 + "px")
+            .attr("cx", self.clientWidth / 2 + "px")
             .attr("cy", columnHeight / 2 + 3+ "px")
             .attr("r", function(d){ 
                 var max = column.maxValue +  Math.abs(column.minValue);
                 var x = Math.abs(d.value - column.minValue ) / max  * 6
                 return x;
-            })
+            });
+    }
+    function _styleCell(v){
+        
+        var column = v.column;
 
+        if(column.circlesOn){
+            _createCircleStyle(this,v);
             return "text-align:left;padding: 0px 0px; max-height:" + columnHeight+paddingHeight*2+"px;";
         }else{
             var style = "text-align:left;padding:" +paddingHeight+"px "+ paddingWidth+"px;";
@@ -239,6 +242,7 @@ define(function () {
             self.parentNode.classList.add("even");
             return;
         }
+        // Get TR CLass
         var sibl = self.parentNode.previousSibling
         if(tempRowIndex == prevRowIndex){
             if(sibl && sibl.classList){
@@ -328,7 +332,7 @@ define(function () {
             .html(function(d) { 
                 return ObjectTypes.Quantitative == d.column.type && d.column.circlesOn ? "" : d.value
             })
-            .attr("style", _appendCircleForNumbers)
+            .attr("style", _styleCell)
 
 
 
@@ -410,7 +414,7 @@ define(function () {
                     .html(function(d) { 
                         return ObjectTypes.Quantitative == d.column.type && d.column.circlesOn ? "" : d.value
                     })
-                    .attr("style", _appendCircleForNumbers)
+                    .attr("style", _styleCell)
 
                 updateTable();
                 return table;
