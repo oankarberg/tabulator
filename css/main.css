@@ -35,7 +35,6 @@ path {
     position: absolute;
     margin-left: 200px;
     float: left;
-
     overflow: hidden;
     overflow-x: scroll;
     padding: 0px;
@@ -178,6 +177,13 @@ ul{
 }
 ul{
     padding-left: 0;
+}
+#category-dashboard{
+    margin-top: 20px;
+}
+#category-dashboard p{
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 .category-dashboard-category{
     margin: 5px 2px;
