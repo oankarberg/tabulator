@@ -35,13 +35,25 @@ define(function () {
             select.appendChild(defaulOp)
             var scales =Object.keys(ObjectTypes);
             for(var k = 0; k < scales.length; k++){
-                var el = document.createElement("option");
-                el.textContent = scales[k];
-                el.value = scales[k]
-                if(el.value == category.type){
-                    el.selected = true;
+                if(category.type != "Numerical"  && scales[k] != "Numerical"){
+                    var el = document.createElement("option");
+                    el.textContent = scales[k];
+                    el.value = scales[k]
+                    if(el.value == category.type){
+                        el.selected = true;
+                    }
+                    select.appendChild(el)
+
+                }else if(category.type == "Numerical" && scales[k] == "Numerical"){
+                    var el = document.createElement("option");
+                    el.textContent = scales[k];
+                    el.value = scales[k]
+                    if(el.value == category.type){
+                        el.selected = true;
+                    }
+                    select.appendChild(el)
                 }
-                select.appendChild(el)
+                
                 
             }
             select.addEventListener("change", function(){_checkValue(this,parentElement,category)});
