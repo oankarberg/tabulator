@@ -3,8 +3,8 @@
 
 var ObjectTypes = {Nominal: "Nominal",
                         Numerical: "Numerical",
-                        Ordinal: "Ordinal",
-                        Interval: "Interval"};
+                        Ordinal: "Ordinal"};
+                        // Interval: "Interval"};
 
 define(function (require) {
 

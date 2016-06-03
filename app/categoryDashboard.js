@@ -64,7 +64,7 @@ define(function () {
 
                 var cellValue = data[i][category.name]
                 if($.inArray(cellValue, existingValues) == -1){
-
+                     category.sortingByArray.unshift(cellValue)
                     innerTablehtml += "<tr><td class='" + columnId + "-index'>" + index +  "</td><td class='" + columnId + "-cellValue'>" + cellValue + "</td></tr>" 
                     index++;
                 }

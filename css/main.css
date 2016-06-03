@@ -198,7 +198,7 @@ ul{
     // height: 0px;
     opacity: 0;
     max-height: 0px;
-    transition: max-height .3s linear;
+    // transition: max-height .3s linear;
 }
 
 .category-dashboard-category ul.visible {
@@ -206,7 +206,7 @@ ul{
     opacity: 1;
     // height: 50px;
     max-height: 1000px;
-    transition: max-height .3s linear;
+    // transition: max-height .3s linear;
 }
 .category-dashboard-category-header:hover{
     cursor: pointer;
