@@ -177,15 +177,15 @@ define(function () {
         var column = v.column
         d3.select(self).append("svg")
             .attr("width", column.width )
-            .attr("height", "100%")
+            .attr("height", columnHeight+paddingHeight)
             .append("circle")
-            .attr("cx", self.clientWidth / 2 + "px")
-            .attr("cy", columnHeight / 2 + 1 + "px")
+            .attr("cx", column.width / 2 + "px")
+            .attr("cy", columnHeight/2+paddingHeight/2 + 3 +"px")
             .attr("fill", color ? color : "#000")
             .attr("r", function(d){ 
                 var max = column.maxValue +  Math.abs(column.minValue);
-                var area = (0.2+Math.abs((d.value - column.minValue ) / max)) * (columnHeight) *M_PI*M_PI;
-                area = Math.pow(0.98*area, 0.87);
+                var area = (0.2+Math.abs((d.value - column.minValue ) / max)) * (columnHeight)*0.65 *M_PI*M_PI;
+                area = Math.pow(area/0.98, 1/0.87);
                 var r = Math.sqrt(area/M_PI);
                 return r;
             });
