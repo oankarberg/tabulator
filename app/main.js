@@ -2,7 +2,7 @@
 
 
 var ObjectTypes = {Nominal: "Nominal",
-                        Quantitative: "Quantitative",
+                        Numerical: "Numerical",
                         Ordinal: "Ordinal",
                         Interval: "Interval"};
 

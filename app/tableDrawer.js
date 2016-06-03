@@ -69,7 +69,7 @@ define(function () {
         names.forEach(function (name, i ){
             var type = ObjectTypes.Nominal;
             if (Number(data[0][name]))
-                type = ObjectTypes.Quantitative;
+                type = ObjectTypes.Numerical;
             else {
                 type = ObjectTypes.Nominal;
             }
@@ -227,7 +227,7 @@ define(function () {
         var mapped = columns.map(function(column) {
             var val =  row[column.name];
             var datatype;
-            if(column.type == ObjectTypes.Quantitative){
+            if(column.type == ObjectTypes.Numerical){
                 val = Number(val)
                 if(column.maxValue < val) {column.maxValue = val}
                 if(column.minValue > val) {column.minValue = val}
@@ -357,7 +357,7 @@ define(function () {
             .attr("getDims", _setDimensionsOfCell)
             // }) // sets the font style
             .html(function(d) { 
-                return ObjectTypes.Quantitative == d.column.type && d.column.circlesOn ? "" : d.value
+                return ObjectTypes.Numerical == d.column.type && d.column.circlesOn ? "" : d.value
             })
             .attr("style", _styleCell)
 
@@ -439,7 +439,7 @@ define(function () {
                     .attr("getDims",_setDimensionsOfCell)
                     // }) // sets the font style
                     .html(function(d) { 
-                        return ObjectTypes.Quantitative == d.column.type && d.column.circlesOn ? "" : d.value
+                        return ObjectTypes.Numerical == d.column.type && d.column.circlesOn ? "" : d.value
                     })
                     .attr("style", _styleCell)
 

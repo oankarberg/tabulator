@@ -102,7 +102,7 @@ define(function () {
             $(list).toggleClass('visible');
             // $(list).height(0);
         });
-        if (category.type == ObjectTypes.Quantitative){
+        if (category.type == ObjectTypes.Numerical){
             var item1 = document.createElement("li");
             item1.textContent ="Toggle Circles: ";
             var button = document.createElement("button");
