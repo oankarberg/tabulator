@@ -44,7 +44,7 @@ define(function () {
                     }
                     select.appendChild(el)
 
-                }else if(category.type == "Numerical" && scales[k] == "Numerical"){
+                }else if(category.type == "Numerical"){
                     var el = document.createElement("option");
                     el.textContent = scales[k];
                     el.value = scales[k]
