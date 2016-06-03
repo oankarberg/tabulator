@@ -13,7 +13,7 @@ define(function () {
     var sortingFunction = null;
     var currentlySorting = {by: "", order: ""};
 
-
+    var M_PI = 3.145
     
     function _paddingEstimation(size, rows){
         //Interpolated padding height
@@ -180,12 +180,14 @@ define(function () {
             .attr("height", "100%")
             .append("circle")
             .attr("cx", self.clientWidth / 2 + "px")
-            .attr("cy", columnHeight / 2 + 3+ "px")
+            .attr("cy", columnHeight / 2 + 1 + "px")
             .attr("fill", color ? color : "#000")
             .attr("r", function(d){ 
                 var max = column.maxValue +  Math.abs(column.minValue);
-                var x = Math.abs(d.value - column.minValue ) / max  * 6
-                return x;
+                var area = (0.2+Math.abs((d.value - column.minValue ) / max)) * (columnHeight) *M_PI*M_PI;
+                area = Math.pow(0.98*area, 0.87);
+                var r = Math.sqrt(area/M_PI);
+                return r;
             });
     }
     function _styleCell(v){
