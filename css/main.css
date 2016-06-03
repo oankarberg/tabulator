@@ -47,7 +47,7 @@ col.columnHover{
 
 }
 .headerCell {
-    border-right: solid #ddd 1px;
+    /*font-weight: bold;*/
 }
 
 td:hover::after,
