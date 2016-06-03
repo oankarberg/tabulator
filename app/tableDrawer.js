@@ -1,7 +1,7 @@
 
 define(function () {
     var fields;
-    var color = "#DDD";
+    var color = "#F98600";
     var _arrayFields = []; 
 
     var paddingHeight = 4;
@@ -312,7 +312,7 @@ define(function () {
                     .enter()
                     .append("th")
                     .attr("style", function(value){return value.alignStyle + value.padding + "padding-bottom: 10px;"
-                                    + "border-bottom: solid "+color+" 1px;"})
+                                    + "border-bottom: solid "+"#DDD"+" 1px;"})
                     .on("click", function(d) {
                             var arrowToBeRemoved = document.getElementById("arrow");
                             if(arrowToBeRemoved){arrowToBeRemoved.parentNode.removeChild(arrowToBeRemoved)}
