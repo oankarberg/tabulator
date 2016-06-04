@@ -268,9 +268,14 @@ define(function () {
     }
 
     function _setTRClassName(self, tempRowIndex){
-        if(paddingHeight > paddingHeightForFillColor){
-            self.parentNode.classList.add("even");
-            return;
+        var nominalSorting = false;
+        if (!(currentlySorting.by.type == ObjectTypes.Nominal || currentlySorting.by.type == ObjectTypes.Ordinal )){
+            if(paddingHeight > paddingHeightForFillColor){
+                self.parentNode.classList.add("even");
+                return;
+            }
+        }else{
+            nominalSorting = true;
         }
         // Get TR CLass
         var sibl = self.parentNode.previousSibling
@@ -292,7 +297,12 @@ define(function () {
 
         // SET BACKGROUND COLOR
         if(self.parentNode.classList.contains("odd")){
-            self.parentNode.style.backgroundColor = "rgba(234,234,234, " + (1 - (paddingHeight / paddingHeightForFillColor))+ ")";
+            var alpha = (1 - (paddingHeight / paddingHeightForFillColor));
+            if (nominalSorting == true){
+                console.log("hej")
+                alpha = Math.max(0.3, alpha);
+                }
+            self.parentNode.style.backgroundColor = "rgba(234,234,234, " + alpha + ")";
         }
     }
 
