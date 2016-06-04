@@ -121,9 +121,11 @@ define(function () {
     }
 
     function customAscending(a, b){
+
             return a - b;
     }
     function customDescending(a, b){
+
             return b - a;
     }
 
@@ -135,7 +137,8 @@ define(function () {
                     currentlySorting.order = order
                     sortingFunction = function (a,b) { 
                         if(column.type == ObjectTypes.Ordinal){
-                            return customAscending(column.sortingByArray.indexOf(a[column.name]), column.sortingByArray.indexOf(b[column.name]));
+
+                            return customAscending(column.sortingByArray.indexOf(a[column.name].toString()), column.sortingByArray.indexOf(b[column.name].toString()));
                         }else{
                           return d3.ascending(a[column.name], b[column.name]);   
                         }
@@ -146,7 +149,7 @@ define(function () {
                     currentlySorting.order = order
                     sortingFunction = function (a,b) {
                         if(column.type == ObjectTypes.Ordinal){
-                            return customDescending(column.sortingByArray.indexOf(a[column.name]), column.sortingByArray.indexOf((b[column.name])));
+                            return customDescending(column.sortingByArray.indexOf(a[column.name].toString()), column.sortingByArray.indexOf((b[column.name].toString())));
                         } else{
                             return d3.descending(a[column.name], b[column.name]);
                         }
@@ -467,6 +470,7 @@ define(function () {
         },
         updateTable: function(){
             _updateTable();
+            
         },
         toggleVisibility: function(category){
             _toggleVisibility(category);

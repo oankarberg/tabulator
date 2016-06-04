@@ -63,10 +63,12 @@ define(function () {
 
             var existingValues = []
             var index  = 1
-            for(var i  = 1; i < data.length; i++){
+            for(var i  = 0; i < data.length; i++){
                 // console.log("lool" ,data[i][fields[key].name])
 
-                var cellValue = data[i][category.name]
+                var cellValue = data[i][category.name];
+                if (typeof cellValue == "number")
+                    cellValue = cellValue.toString();
                 if($.inArray(cellValue, existingValues) == -1){
                      category.sortingByArray.unshift(cellValue)
                     innerTablehtml += "<tr id='draggable'><td class='" + columnId + "-index center'>" + index +  "</td><td class='" + columnId + "-cellValue'>" + cellValue + "</td></tr>" 
@@ -219,7 +221,7 @@ define(function () {
                     $("td." + columnId + "-cellValue", ui.item.parent()).each(function (i,element) {
                         category.sortingByArray.push(element.innerHTML)
                     });
-
+                    console.log(category.sortingByArray);
                     _table.updateTable();
                 };
 
