@@ -1,7 +1,6 @@
 define(function () {
 
-    var table;
-
+    var self;
     var dashboardID;
     function _checkValue(self,subNav,category){
          if(self.options[self.selectedIndex].value != ObjectTypes.Ordinal){
@@ -14,6 +13,7 @@ define(function () {
 
         }
         category.type = self.options[self.selectedIndex].value 
+        table.updateTable();
        
     }
     function _setupDataTypeSelection(parentElement, category, data){
@@ -35,24 +35,16 @@ define(function () {
             select.appendChild(defaulOp)
             var scales =Object.keys(ObjectTypes);
             for(var k = 0; k < scales.length; k++){
-                if(category.type != "Numerical"  && scales[k] != "Numerical"){
-                    var el = document.createElement("option");
-                    el.textContent = scales[k];
-                    el.value = scales[k]
-                    if(el.value == category.type){
-                        el.selected = true;
-                    }
-                    select.appendChild(el)
+                if(category.type != "Numerical"  && scales[k] == "Numerical") continue;
 
-                }else if(category.type == "Numerical"){
-                    var el = document.createElement("option");
-                    el.textContent = scales[k];
-                    el.value = scales[k]
-                    if(el.value == category.type){
-                        el.selected = true;
-                    }
-                    select.appendChild(el)
+                var el = document.createElement("option");
+                el.textContent = scales[k];
+                el.value = scales[k]
+                if(el.value == category.type){
+                    el.selected = true;
                 }
+                select.appendChild(el)
+
                 
                 
             }
@@ -65,7 +57,7 @@ define(function () {
             var tableMeta = document.createElement("li");
             var innerTablehtml= "<table id='sort-" + columnId +"'  class='grid' >" + 
                                     "<thead>" + 
-                                    "<tr><th class='index'>Index</th><th> " + category.displayName + "</th></tr>" + 
+                                    "<tr><td class='index'>Index</td><td> " + category.displayName + "</td></tr>" + 
                                 "</thead>" + 
                                 "<tbody>";
 
@@ -77,7 +69,7 @@ define(function () {
                 var cellValue = data[i][category.name]
                 if($.inArray(cellValue, existingValues) == -1){
                      category.sortingByArray.unshift(cellValue)
-                    innerTablehtml += "<tr><td class='" + columnId + "-index'>" + index +  "</td><td class='" + columnId + "-cellValue'>" + cellValue + "</td></tr>" 
+                    innerTablehtml += "<tr id='draggable'><td class='" + columnId + "-index center'>" + index +  "</td><td class='" + columnId + "-cellValue'>" + cellValue + "</td></tr>" 
                     index++;
                 }
                     
@@ -105,24 +97,26 @@ define(function () {
     function createRow(category,data){
         var element = document.createElement("div");
         element.className = "category-dashboard-category";
-        element.innerHTML = "<p class='category-dashboard-category-header'>"+category.displayName+"</p>";
+        element.innerHTML = "<p class='category-dashboard-category-header'>"+category.displayName+"<img class='down' src='/svg/arrow_down.png'/><img class='right active' src='/svg/arrow_right.png'/></p>";
         
 
         var list = document.createElement("ul");
         list.className = "sub-nav";
         $(element).find('.category-dashboard-category-header').click(function() {
             $(list).toggleClass('visible');
+            $(element).find('.down').toggleClass('active');
+            $(element).find('.right').toggleClass('active');
             // $(list).height(0);
         });
         if (category.type == ObjectTypes.Numerical){
             var item1 = document.createElement("li");
-            item1.textContent ="Toggle Circles: ";
+            // item1.textContent ="Circles:";
             var button = document.createElement("button");
             var span = document.createElement("span");
             button.className = "toggle-circle";
             span.classList.add("span-circle");
             button.addEventListener("click", function() {
-                button.classList.toggle("active");
+                $(this).toggleClass("active");
                 table.toggleCircles(category) } );
             // button.textContent = "Toggle Circle";
             button.appendChild(span);
@@ -132,8 +126,11 @@ define(function () {
         
         var item2 = document.createElement("li");
         var button = document.createElement("button");
-        button.textContent ="Toggle Visibility";
-        $(button).click(function () { table.toggleVisibility(category)})
+        button.className = "tabulator-button active";
+        button.textContent ="Visible";
+        $(button).click(function () { 
+            $(this).toggleClass("active");
+            table.toggleVisibility(category)})
         item2.appendChild(button);
         list.appendChild(item2);
         _setupDataTypeSelection(list, category, data)
@@ -176,8 +173,21 @@ define(function () {
             if (!div)
                 return
 
+            $(function() {
+                $( "#fonts-select" ).selectmenu();     
+                $( "#fonts-select" ).on( "selectmenuselect", function( event, ui ) {
+                    document.getElementById("table-wrapper").style.fontFamily = fonts[ui.item.value];
+                } );
+            });
 
-            div.innerHTML = "<div id='paddingSlider'></div>";
+
+            $("#fonts").click(function(){
+                $(this).find("img.down").toggleClass("active")
+                $(this).find("img.right").toggleClass("active")
+            }, function(){
+                $(this).find("img.down").toggleClass("active")
+                $(this).find("img.right").toggleClass("active")
+            });
             $( "#paddingSlider" ).slider({
                 value: table.getPadding(),
                 min: 2,
@@ -209,6 +219,8 @@ define(function () {
                     $("td." + columnId + "-cellValue", ui.item.parent()).each(function (i,element) {
                         category.sortingByArray.push(element.innerHTML)
                     });
+
+                    _table.updateTable();
                 };
 
 
@@ -219,6 +231,7 @@ define(function () {
 
             });
 
+  
              
 
 

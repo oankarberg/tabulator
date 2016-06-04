@@ -12,6 +12,25 @@
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js">
 </script>
 
+<script>
+  $(function() {
+    $( "#speed" ).selectmenu();
+ 
+    $( "#files" ).selectmenu();
+ 
+    $( "#number" )
+      .selectmenu()
+      .selectmenu( "menuWidget" )
+        .addClass( "overflow" );
+           
+  });
+  $(function() {
+             
+                $( "#fonts-select" ).selectmenu();
+            
+              });
+  </script>
+
   <script type="text/javascript" src="lib/jquery-ui.min.js"></script>
   <script data-main="app" src="require/require.js"></script>
   <script type="text/javascript" src="lib/html2canvas/html2canvas.js"></script>
@@ -19,26 +38,35 @@
 </head>
 <body>
 
-
 <div id="sidebar">
     <button id="save-table-button"> Save Table as PNG </button>
-    <h3>Fields</h3> 
-    <div class="dropdown">
-      <button class="dropbtn">Fonts</button>
-      <div class="dropdown-content">
-        <span> SANS-SERIF</span>
-        <a class="change-font">Gill Sans</a>
-        <a class="change-font">Arial</a>
-        <a class="change-font">Helvetica</a>
-        <a class="change-font">Verdana</a>
-        <span> SERIF </span>
-        <a class="change-font">Times New Roman</a> 
-        <a class="change-font">Palatino</a>
-      </div>
-</div>
-      <div id ="category-dashboard">
 
-      </div>
+    <h3>Settings</h3> 
+    <div class="dropdown" id="fonts">
+
+      <select name="fonts-select" id="fonts-select">
+        <optgroup label="SANS-SERIF">
+          <option  value="Gill">Gill Sans</option>
+          <option value="Arial">Arial</option>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Verdana">Verdana</option>
+        </optgroup>
+        <optgroup label="SERIF">
+          <option value="Times">Times New Roman</option> 
+          <option value="Palatino">Palatino</option>
+        </optgroup>
+      </select>
+       
+ 
+    </div>
+    <div id='paddingSlider'></div>
+
+
+    <h3>Fields</h3> 
+    
+    <div id ="category-dashboard">
+
+    </div>
     
 
 </div>

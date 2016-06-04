@@ -32,7 +32,7 @@ define(function () {
 
     function _toggleVisibility(category){
         category.visible = category.visible ? false : true;
-        updateTable(); 
+        _updateTable(); 
     }
     function _reorderColumns(table) {
         var startIndex = table.startIndex-1;
@@ -51,7 +51,7 @@ define(function () {
                 _arrayFields[i-1] = temp;
             }
         }
-        updateTable()
+        _updateTable()
         
 
     }
@@ -159,7 +159,7 @@ define(function () {
             prevRowIndex = 0;
             _resetPreviousRowValues();
             _resetTRClassNames();
-            updateTable()
+            _updateTable()
         }
 
 
@@ -200,7 +200,7 @@ define(function () {
             if (v.column.isHeader){
                 d3.select(this).classed("headerCell",true);
             }
-            return v.column.alignStyle+":left;padding:" +paddingHeight+"px "+ paddingWidth+"px;";
+            return v.column.alignStyle+";padding:" +paddingHeight+"px "+ paddingWidth+"px;";
         }
     }
 
@@ -212,7 +212,7 @@ define(function () {
     
     function _toggleCircles(column){
         column.circlesOn = column.circlesOn ? false : true
-        updateTable();
+        _updateTable();
     }
     function _setDimensionsOfCell(v){
         
@@ -249,7 +249,7 @@ define(function () {
                 }else{
                     column.previousRowVal = val;
                 }
-                
+                column.alignStyle = "text-align:left;"
 
             }
             return {column: column, value: val};
@@ -291,7 +291,7 @@ define(function () {
         }
     }
 
-    function updateTable(){
+    function _updateTable(){
         if (data == null)
             return
 
@@ -299,6 +299,9 @@ define(function () {
 
         if (sortingFunction) {
             data = data.sort(sortingFunction)
+        }
+        if(currentlySorting.by.displayName){
+            $("#sortedby").text(currentlySorting.by.displayName)
         }
         var tWrapper = d3.select("#table-wrapper");
 
@@ -443,7 +446,7 @@ define(function () {
                     })
                     .attr("style", _styleCell)
 
-                updateTable();
+                _updateTable();
                 return tabled3;
             }
 
@@ -460,14 +463,16 @@ define(function () {
         toggleCircles: function(column){
             _toggleCircles(column)
         },
-
+        updateTable: function(){
+            _updateTable();
+        },
         toggleVisibility: function(category){
             _toggleVisibility(category);
         },
 
         setPadding: function(padding){
             paddingHeight = padding;
-            updateTable();
+            _updateTable();
         },
         getPadding: function(){
             return paddingHeight;

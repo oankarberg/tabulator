@@ -1,10 +1,6 @@
 define(function () {
 
 
-
-
-    
-
     var callback = function (result, fields) { console.log("no callback provided");};
 
     document.getElementById("fileuploadinput").addEventListener('change', function(event){

@@ -13,11 +13,6 @@ define(function (require) {
     var categoryDashboard = require('./categoryDashboard.js');
 
 
-
-
-
-
-    
     fileHandler.setFileCallback( function (data) {
         table.resetTable();
         $('#sidebar').show();
@@ -37,7 +32,7 @@ define(function (require) {
         h1.id = "table_header";
         tableWrapper.insertBefore(h1, tableWrapper.firstChild);
         // var header = document.getElementById("table_header");
-        h1.innerHTML =  "Showing data by " +late
+        h1.innerHTML =  "Showing data by <span id='sortedby'>"+late +"</span>";
 
 
 
